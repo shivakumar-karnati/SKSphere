@@ -1,0 +1,321 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block css %}
+<link rel="stylesheet"
+      href="{% static 'css/orders/checkout.css' %}">
+{% endblock %}
+
+{% block content %}
+
+<div class="container py-5">
+
+    <div class="checkout-header text-center mb-5">
+
+        <h1 class="fw-bold">
+            🛍 Checkout
+        </h1>
+
+        <p>
+            Complete your order securely
+        </p>
+
+    </div>
+
+    <div class="row g-4">
+
+        <!-- LEFT -->
+
+        <div class="col-lg-7">
+
+            <div class="checkout-card">
+
+                <h3 class="section-title">
+                    🚚 Shipping Details
+                </h3>
+
+                <form method="POST"
+                      action="{% url 'save_checkout' %}">
+
+                    {% csrf_token %}
+
+                    <div class="mb-3">
+
+                        <label class="form-label">
+                            Full Name
+                        </label>
+
+                        <input type="text"
+                               name="full_name"
+                               class="form-control custom-input"
+                               required>
+
+                    </div>
+
+                    <div class="mb-3">
+
+                        <label class="form-label">
+                            Address
+                        </label>
+
+                        <textarea
+                            name="address"
+                            rows="4"
+                            class="form-control custom-input"
+                            required></textarea>
+
+                    </div>
+
+                    <div class="row">
+
+                        <div class="col-md-6">
+
+                            <div class="mb-3">
+
+                                <label class="form-label">
+                                    Phone Number
+                                </label>
+
+                                <input type="text"
+                                       name="phone"
+                                       class="form-control custom-input"
+                                       required>
+
+                            </div>
+
+                        </div>
+
+                        <div class="col-md-6">
+
+                            <div class="mb-3">
+
+                                <label class="form-label">
+                                    City
+                                </label>
+
+                                <input type="text"
+                                       name="city"
+                                       class="form-control custom-input"
+                                       required>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+                    <div class="mt-4">
+                        <label class="form-label">
+                            Payment Method
+                        </label>
+
+                        <div class="form-check">
+
+                            <input
+                                class="form-check-input"
+                                type="radio"
+                                name="payment_method"
+                                value="COD"
+                                checked>
+
+                            <label class="form-check-label">
+
+                                💵 Cash On Delivery
+
+                            </label>
+
+                        </div>
+
+                        <div class="form-check">
+
+                            <input
+                                class="form-check-input"
+                                type="radio"
+                                name="payment_method"
+                                value="UPI">
+
+                            <label class="form-check-label">
+
+                                📱 UPI Payment
+
+                            </label>
+
+                        </div>
+                    </div>
+                    <br>
+                    <button
+                        type="submit"
+                        class="btn payment-btn">
+
+                        💳 Proceed 
+
+                    </button>
+
+                </form>
+
+            </div>
+
+        </div>
+
+        <!-- RIGHT -->
+
+        <div class="col-lg-5">
+
+            <div class="checkout-card">
+
+                <h3 class="section-title">
+                    📦 Order Summary
+                </h3>
+
+                {% for item in cart_items %}
+
+                <div class="summary-item">
+
+                    <span>
+
+                        {{ item.product.name }}
+
+                        ×
+
+                        {{ item.quantity }}
+
+                    </span>
+
+                    <strong>
+
+                        ₹{{ item.product.price }}
+
+                    </strong>
+
+                </div>
+
+                {% endfor %}
+
+                <hr>
+
+                <!-- Coupon Form -->
+
+                <h5 class="mb-3">
+                    🎁 Apply Coupon
+                </h5>
+
+                <form method="POST"
+                      action="{% url 'apply_coupon' %}">
+
+                    {% csrf_token %}
+
+                    <div class="input-group">
+
+                        <input
+                            type="text"
+                            name="coupon"
+                            class="form-control"
+                            placeholder="Enter Coupon">
+
+                        <button
+                            class="btn btn-success">
+
+                            Apply
+
+                        </button>
+
+                    </div>
+
+                </form>
+
+                {% if coupon %}
+
+                <div class="alert alert-success mt-3">
+
+                    Coupon Applied:
+
+                    <strong>
+
+                        {{ coupon.code }}
+
+                    </strong>
+
+                    ({{ coupon.discount }}% OFF)
+
+                </div>
+
+                {% endif %}
+
+                <hr>
+
+                <div class="price-box">
+
+                    <p>
+
+                        Subtotal
+
+                        <span>
+
+                            ₹{{ total }}
+
+                        </span>
+
+                    </p>
+
+                    <p class="text-success">
+
+                        Discount
+
+                        <span>
+
+                            -₹{{ discount }}
+
+                        </span>
+
+                    </p>
+
+                    <h4>
+
+                        Final Total
+
+                        <span>
+
+                            ₹{{ final_total }}
+
+                        </span>
+
+                    </h4>
+
+                </div>
+
+            </div>
+
+            <div class="checkout-card mt-4">
+
+                <h4>
+                    🔒 Why Shop With Us?
+                </h4>
+
+                <ul class="feature-list">
+
+                    <li>
+                        🚚 Fast Delivery
+                    </li>
+
+                    <li>
+                        🔐 Secure Payments
+                    </li>
+
+                    <li>
+                        ⭐ Premium Quality
+                    </li>
+
+                    <li>
+                        💯 Trusted Platform
+                    </li>
+
+                </ul>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+{% endblock %}

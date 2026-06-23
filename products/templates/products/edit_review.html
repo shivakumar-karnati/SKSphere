@@ -1,0 +1,45 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<div class="container mt-5">
+
+    <div class="card p-4 shadow">
+
+        <h2>Edit Review</h2>
+
+        <form method="POST">
+
+            {% csrf_token %}
+
+            <select
+                name="rating"
+                class="form-select">
+
+                <option value="5">⭐⭐⭐⭐⭐</option>
+                <option value="4">⭐⭐⭐⭐</option>
+                <option value="3">⭐⭐⭐</option>
+                <option value="2">⭐⭐</option>
+                <option value="1">⭐</option>
+
+            </select>
+
+            <textarea
+                name="comment"
+                class="form-control mt-3"
+                rows="4">{{ review.comment }}</textarea>
+
+            <button
+                class="btn btn-success mt-3">
+
+                Update Review
+
+            </button>
+
+        </form>
+
+    </div>
+
+</div>
+
+{% endblock %}

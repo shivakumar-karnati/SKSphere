@@ -1,0 +1,385 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block css %}
+<link rel="stylesheet"
+      href="{% static 'css/products/homestyle.css' %}">
+{% endblock %}
+
+{% block content %}
+
+<section class="hero-banner">
+
+    <div class="hero-overlay">
+        <h1>
+            Shop Smarter <br>
+            With <span>SKSphere</span>
+        </h1>
+
+        <div class="line"></div>
+
+        <p>
+            Discover Premium Products <br>
+            At Amazing Prices
+        </p>
+
+        <a href="{% url 'products' %}" class="hero-btn">
+            Shop Now →
+        </a>
+
+        <div class="hero-features">
+
+            <div class="feature-box">
+                <div class="icon">🔒</div>
+                <span>Secure Payments</span>
+            </div>
+
+            <div class="feature-box">
+                <div class="icon">⭐</div>
+                <span>Premium Quality</span>
+            </div>
+
+            <div class="feature-box">
+                <div class="icon">🚚</div>
+                <span>Fast Delivery</span>
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+<div class="container mt-5 text-center" id="category">
+
+    <h2 class="text-center mb-4">
+        Shop By Category
+    </h2>
+
+    <div class="row justify-content-center g-4">
+
+        {% for category in categories %}
+
+        <div class="col-lg-3 col-md-4 col-sm-6">
+
+            <a href="{% url 'category_products' category.id %}"
+               class="text-decoration-none text-dark">
+
+                <div class="card category-card">
+
+                    <div class="card-body text-center">
+
+                        <h1>
+                            {% if category.name == "Electronics" %}
+                                📱
+                            {% elif category.name == "Fashion" %}
+                                👕
+                            {% elif category.name == "Books" %}
+                                📚
+                            {% elif category.name == "Accessories" %}
+                                ⌚
+                            {% elif category.name == "Sports" %}
+                                ⚽
+                            {% else %}
+                                🛒
+                            {% endif %}
+                        </h1>
+
+                        <h5>{{ category.name }}</h5>
+
+                    </div>
+
+                </div>
+
+            </a>
+
+        </div>
+
+        {% endfor %}
+
+    </div>
+
+</div>
+<hr>
+<!-- =========================
+     RECOMMENDED PRODUCTS
+========================= -->
+
+<section class="featured-section">
+
+
+<div class="section-header">
+
+    <h2>🔥 Recommended For You</h2>
+
+</div>
+
+<div class="products-slider">
+
+    {% for product in recommended_products %}
+
+    <div class="product-card">
+
+        <img src="{{ product.image.url }}"
+             alt="{{ product.name }}">
+        <hr>
+        <div class="product-content">
+
+            <h5>{{ product.name }}</h5>
+
+            <p>₹{{ product.price }}</p>
+
+            <a href="{% url 'product_detail' product.id %}"
+               class="shop-btn">
+
+                View Product
+
+            </a>
+
+        </div>
+
+    </div>
+
+    {% endfor %}
+
+</div>
+
+</section>
+<hr>
+
+<!-- =========================
+     RECENTLY VIEWED
+========================= -->
+
+{% if recent_products %}
+
+<section class="featured-section">
+
+
+<div class="section-header">
+
+    <h2>👀 Recently Viewed</h2>
+
+</div>
+
+<div class="products-slider">
+
+    {% for product in recent_products %}
+
+    <div class="product-card">
+
+        <img src="{{ product.image.url }}"
+             alt="{{ product.name }}">
+        <hr>
+        <div class="product-content">
+
+            <h5>{{ product.name }}</h5>
+
+            <p>₹{{ product.price }}</p>
+
+            <a href="{% url 'product_detail' product.id %}"
+               class="shop-btn">
+
+                View Again
+
+            </a>
+
+        </div>
+
+    </div>
+
+    {% endfor %}
+
+</div>
+
+<hr>
+
+</section>
+
+{% endif %}
+
+<section class="featured-section">
+
+    <div class="section-header">
+
+        <h2>
+            🏆 Top Sellers
+        </h2>
+
+    </div>
+
+    <div class="products-slider">
+
+        {% for product in best_sellers %}
+
+        <div class="product-card">
+
+            <img src="{{ product.image.url }}">
+            <hr>
+            <div class="product-content">
+
+                <h5>
+                    {{ product.name }}
+                </h5>
+
+                <p>
+                    ₹{{ product.price }}
+                </p>
+
+                <a href="{% url 'product_detail' product.id %}"
+                   class="shop-btn">
+
+                    View Product
+
+                </a>
+
+            </div>
+
+        </div>
+
+        {% endfor %}
+
+    </div>
+
+</section>
+
+<hr>
+
+<!-- =========================
+     NEW ARRIVALS
+========================= -->
+
+<section class="featured-section">
+
+
+<div class="section-header">
+
+    <h2>🆕 New Arrivals</h2>
+
+</div>
+
+<div class="products-slider">
+
+    {% for product in new_arrivals %}
+
+    <div class="product-card">
+
+        <img src="{{ product.image.url }}"
+             alt="{{ product.name }}">
+        <hr>
+        <div class="product-content">
+
+            <h5>{{ product.name }}</h5>
+
+            <p>₹{{ product.price }}</p>
+
+            <a href="{% url 'product_detail' product.id %}"
+               class="shop-btn">
+
+                Explore
+
+            </a>
+
+        </div>
+
+    </div>
+
+    {% endfor %}
+
+</div>
+
+<hr>
+
+</section>
+
+<!-- =========================
+     FEATURED PRODUCTS
+========================= -->
+
+<section class="featured-section">
+
+
+<div class="section-header">
+
+    <h2>⭐ Featured Products</h2>
+
+    <a href="{% url 'products' %}">
+        View All →
+    </a>
+
+</div>
+
+<div class="products-slider">
+
+    {% for product in featured_products %}
+
+    <div class="product-card">
+
+        <img src="{{ product.image.url }}"
+             alt="{{ product.name }}">
+        <hr>
+        <div class="product-content">
+
+            <h5>{{ product.name }}</h5>
+
+            <p>₹{{ product.price }}</p>
+
+            <a href="{% url 'product_detail' product.id %}"
+               class="shop-btn">
+
+                View Product
+
+            </a>
+
+        </div>
+
+    </div>
+
+    {% endfor %}
+
+</div>
+
+<hr>
+
+</section>
+
+
+<!-- =========================
+     WHY CHOOSE US
+========================= -->
+
+<section class="why-section">
+
+
+<h2>Why Choose SKSphere?</h2>
+
+<div class="why-grid">
+
+    <div class="why-card">
+        🚚
+        <h4>Fast Delivery</h4>
+        <p>Quick and reliable shipping.</p>
+    </div>
+
+    <div class="why-card">
+        🔒
+        <h4>Secure Payments</h4>
+        <p>Safe and trusted transactions.</p>
+    </div>
+
+    <div class="why-card">
+        ⭐
+        <h4>Premium Products</h4>
+        <p>Quality guaranteed items.</p>
+    </div>
+
+    <div class="why-card">
+        💬
+        <h4>24/7 Support</h4>
+        <p>Always ready to help.</p>
+    </div>
+
+</div>
+
+
+</section>
+
+{% endblock %}

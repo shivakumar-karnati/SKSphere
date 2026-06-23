@@ -1,0 +1,47 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<div class="container mt-5 text-center">
+
+    <div class="card p-5 shadow">
+
+        <h1 class="text-warning">
+
+            ⏳ Payment Under Verification
+
+        </h1>
+
+        <hr>
+
+        <p>
+
+            Your payment screenshot has been uploaded successfully.
+
+        </p>
+
+        <p>
+
+            Our team will verify your payment shortly.
+
+        </p>
+
+        <p>
+
+            You can check your order status in
+            <strong>My Orders</strong>.
+
+        </p>
+
+        <a href="{% url 'my_orders' %}"
+           class="btn btn-primary">
+
+            View My Orders
+
+        </a>
+
+    </div>
+
+</div>
+
+{% endblock %}

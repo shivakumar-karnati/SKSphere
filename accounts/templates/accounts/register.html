@@ -1,0 +1,76 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+
+<link rel="stylesheet" href="{% static 'css/accounts/registerpage.css' %}">
+
+<div class="register-page">
+
+    <div class="register-card">
+
+        
+        <div class="register-logo">
+
+            <img src="{% static 'images/SKSphere logo.png' %}" alt="">
+
+            <h2>SKSphere</h2>
+
+            <p>Create Your Account</p>
+
+        </div>
+
+        <!-- Error -->
+        {% if error %}
+        <div class="alert alert-danger">
+            {{ error }}
+        </div>
+        {% endif %}
+
+        <!-- Register Form -->
+        <form method="POST">
+            {% csrf_token %}
+
+            <div class="input-box">
+                <i class="fas fa-user"></i>
+                <input type="text" name="username" placeholder="Username" required>
+            </div>
+
+            <div class="input-box">
+                <i class="fas fa-envelope"></i>
+                <input type="email" name="email" placeholder="Email" required>
+            </div>
+
+            <div class="input-box">
+                <i class="fas fa-lock"></i>
+                <input type="password" name="password" placeholder="Password" required>
+            </div>
+
+            <div class="input-box">
+                <i class="fas fa-lock"></i>
+                <input type="password" name="confirm_password" placeholder="Confirm Password" required>
+            </div>
+
+            <button type="submit" class="register-btn">
+                Register
+            </button>
+
+        </form>
+
+        <!-- Switch link -->
+        <div class="extra-links">
+
+            <p>
+                Already have an account?
+                <a href="{% url 'login' %}">
+                    Login
+                </a>
+            </p>
+
+        </div>
+
+    </div>
+
+</div>
+
+{% endblock %}

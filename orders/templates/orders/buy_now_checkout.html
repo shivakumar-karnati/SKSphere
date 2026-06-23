@@ -1,0 +1,289 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block css %}
+
+<link rel="stylesheet"
+      href="{% static 'css/orders/buy_now_checkout.css' %}">
+
+{% endblock %}
+
+{% block content %}
+
+<div class="container py-5">
+
+    <h1 class="checkout-title text-center mb-5">
+
+        ⚡ Buy Now Checkout
+
+    </h1>
+
+    <div class="row g-4">
+
+        <!-- Product Section -->
+
+        <div class="col-lg-7">
+
+            <div class="checkout-card">
+
+                <div class="row align-items-center">
+
+                    <div class="col-md-5">
+
+                        <img
+                            src="{{ product.image.url }}"
+                            class="product-image">
+
+                    </div>
+
+                    <div class="col-md-7">
+
+                        <h2>
+
+                            {{ product.name }}
+
+                        </h2>
+
+                        <p class="text-muted">
+
+                            {{ product.description|truncatewords:25 }}
+
+                        </p>
+
+                        <h3 class="price">
+
+                            ₹{{ product.price }}
+
+                        </h3>
+
+                        <!-- Quantity -->
+
+                        <div class="qty-box mt-4">
+
+                            <a href="{% url 'buy_now_decrease' %}"
+                               class="qty-btn minus">
+
+                                <i class="bi bi-dash-lg"></i>
+
+                            </a>
+
+                            <span class="qty-number">
+
+                                {{ qty }}
+
+                            </span>
+
+                            <a href="{% url 'buy_now_increase' %}"
+                               class="qty-btn plus">
+
+                                <i class="bi bi-plus-lg"></i>
+
+                            </a>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+        <!-- Summary -->
+
+        <!-- Right Side -->
+
+        <div class="col-lg-5">
+
+            <!-- Order Summary Card -->
+
+            <div class="summary-card mb-4">
+
+                <h3>
+                    🧾 Order Summary
+                </h3>
+
+                <hr>
+
+                <div class="summary-row">
+
+                    <span>Product Total</span>
+
+                    <strong>
+                        ₹{{ total }}
+                    </strong>
+
+                </div>
+
+                <div class="summary-row text-success">
+
+                    <span>Discount</span>
+
+                    <strong>
+                        - ₹{{ discount }}
+                    </strong>
+
+                </div>
+
+                <hr>
+
+                <div class="summary-row final-total">
+
+                    <span>Final Total</span>
+
+                    <strong>
+                        ₹{{ final_total }}
+                    </strong>
+
+                </div>
+
+                <!-- Coupon -->
+
+                <form
+                    method="POST"
+                    action="{% url 'apply_buy_now_coupon' %}"
+                    class="mt-4">
+
+                    {% csrf_token %}
+
+                    <div class="input-group">
+
+                        <input
+                            type="text"
+                            name="coupon"
+                            class="form-control"
+                            placeholder="Enter Coupon">
+
+                        <button
+                            class="btn btn-success">
+
+                            Apply
+
+                        </button>
+
+                    </div>
+
+                </form>
+
+                {% if coupon %}
+
+                <div class="alert alert-success mt-3">
+
+                    🎉 Coupon Applied
+
+                    <strong>
+                        {{ coupon.code }}
+                    </strong>
+
+                    ({{ coupon.discount }}%)
+
+                </div>
+
+                {% endif %}
+
+            </div>
+
+
+            <!-- Shipping Details Card -->
+
+            <div class="summary-card shipping-card">
+
+                <h3>
+                    🚚 Shipping Details
+                </h3>
+
+                <hr>
+
+                <form
+                    method="POST"
+                    action="{% url 'save_buy_now_checkout' %}">
+
+                    {% csrf_token %}
+
+                    <input
+                        type="text"
+                        name="full_name"
+                        class="form-control mt-3"
+                        placeholder="Full Name"
+                        required>
+
+                    <textarea
+                        name="address"
+                        class="form-control mt-3"
+                        rows="3"
+                        placeholder="Address"
+                        required></textarea>
+
+                    <input
+                        type="text"
+                        name="phone"
+                        class="form-control mt-3"
+                        placeholder="Phone Number"
+                        required>
+
+                    <input
+                        type="text"
+                        name="city"
+                        class="form-control mt-3"
+                        placeholder="City"
+                        required>
+
+                    <div class="mt-4">
+                        <label class="form-label">
+                            Payment Method
+                        </label>
+
+                        <div class="form-check">
+
+                            <input
+                                class="form-check-input"
+                                type="radio"
+                                name="payment_method"
+                                value="COD"
+                                checked>
+
+                            <label class="form-check-label">
+
+                                💵 Cash On Delivery
+
+                            </label>
+
+                        </div>
+
+                        <div class="form-check">
+
+                            <input
+                                class="form-check-input"
+                                type="radio"
+                                name="payment_method"
+                                value="UPI">
+
+                            <label class="form-check-label">
+
+                                📱 UPI Payment
+
+                            </label>
+
+                        </div>
+                    </div>
+                    <br>
+                    <button
+                        type="submit"
+                        class="payment-btn">
+
+                        Proceed ⚡
+
+                    </button>
+
+                </form>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+{% endblock %}

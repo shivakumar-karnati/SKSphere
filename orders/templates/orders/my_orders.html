@@ -1,0 +1,146 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block css %}
+<link rel="stylesheet"
+      href="{% static 'css/orders/myorders.css' %}">
+{% endblock %}
+
+{% block content %}
+
+<div class="orders-container">
+
+    <h1 class="orders-title">
+
+        <i class="bi bi-bag-check-fill"></i>
+
+        My Orders
+
+    </h1>
+    <br>
+    <p>the orders are display in order</p>
+    
+
+    {% for order in orders %}
+
+
+        {% for item in order.orderitem_set.all %}
+
+        <div class="order-card">
+
+            <div class="product-section">
+
+                <img src="{{ item.product.image.url }}"
+                    class="product-image"
+                    alt="{{ item.product.name }}">
+
+                <div class="product-info">
+
+                    <h3>
+                        {{ item.product.name }}
+                    </h3>
+
+                    <p>
+                        Quantity :
+                        <strong>{{ item.quantity }}</strong>
+                    </p>
+
+                    <p>
+                        Price :
+                        ₹{{ item.price }}
+                    </p>
+
+                </div>
+
+            </div>
+
+            <div class="order-details">
+
+                <a href="{% url 'order_detail' order.id %}"
+                    class="btn btn-primary mt-3">
+
+                        View Details
+
+                    </a>
+
+                <p>
+                    Customer :
+                    {{ order.full_name }}
+                </p>
+
+                <p>
+                    City :
+                    {{ order.city }}
+                </p>
+
+                <p>
+                    Ordered :
+                    {{ order.created_at }}
+                </p>
+                <p>
+                    <strong>Payment:</strong>
+                    {{ order.payment_method }}
+                </p>
+
+                <h2 class="amount">
+
+                    ₹{{ order.total_amount }}
+
+                </h2>
+                
+                {% if order.status == "payment Verification" %}
+
+                    <span class="status pending">
+                        ⏳ Payment Verification
+                    </span>
+
+                    {% elif order.status == "Processing" %}
+
+                    <span class="status processing">
+                        ⚙️ Processing
+                    </span>
+
+                    {% elif order.status == "Shipped" %}
+
+                    <span class="status shipped">
+                        🚚 Shipped
+                    </span>
+
+                    {% elif order.status == "Delivered" %}
+
+                    <span class="status delivered">
+                        ✅ Delivered
+                    </span>
+
+                    {% else %}
+
+                    <span class="status cancelled">
+                        ❌ Cancelled
+                    </span>
+
+                {% endif %}
+                <hr>
+                {% if order.status == 'payment Verification' or order.status == 'Processing' %}
+
+                    <a href="{% url 'cancel_order' order.id %}"
+                    class="btn btn-danger btn-sm mt-2"
+                    onclick="return confirm('Are you sure you want to cancel this order?')">
+
+                        ❌ Cancel Order
+
+                    </a>
+
+                {% endif %}
+
+            </div>
+
+        </div>
+
+        {% endfor %}
+
+{% endfor %}
+
+
+</div>
+
+{% endblock %}

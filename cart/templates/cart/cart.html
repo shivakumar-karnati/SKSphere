@@ -1,0 +1,149 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block css %}
+<link rel="stylesheet"
+      href="{% static 'css/cart/cartstyle.css' %}">
+{% endblock %}
+
+{% block content %}
+
+<div class="container mt-5">
+
+    <h1 class="text-center mb-5">
+         My Cart 🛒
+    </h1>
+
+    <div class="row">
+
+        {% for item in cart_items %}
+
+        <div class="col-md-12 mb-4">
+
+            <div class="card shadow">
+
+                <div class="row g-2">
+
+                    <div class="col-md-3">
+
+                        <a href="{% url 'product_detail' item.product.id %}">
+                            <img src="{{ item.product.image.url }}" class="img-fluid rounded-start"
+                             height="200">
+                        </a>
+
+                    </div>
+
+                    <div class="col-md-9">
+
+                        <div class="card-body">
+
+                            <h3>
+                                {{ item.product.name }}
+                            </h3>
+
+                            <h5 class="text-primary">
+
+                                ₹{{ item.product.price }}
+
+                            </h5>
+
+                            <p class="fw-bold text-success">
+
+                                ₹{{ item.product.price }}
+
+                                ×
+
+                                {{ item.quantity }}
+
+                            </p>
+
+                            <div class="d-flex align-items-center gap-2">
+
+                                <a href="{% url 'decrease_quantity' item.id %}"
+                                class="btn btn-danger">
+
+                                    <i class="bi bi-dash-lg"></i>
+
+                                </a>
+
+                                <span class="fw-bold fs-5">
+                                    {{ item.quantity }}
+                                </span>
+
+                                <a href="{% url 'increase_quantity' item.id %}"
+                                class="btn btn-success">
+
+                                    <i class="bi bi-plus-lg"></i>
+
+                                </a>
+
+                            </div>
+                            <a href="{% url 'remove_from_cart' item.id %}"
+                            class="btn btn-danger mt-3">
+
+                                <i class="bi bi-trash-fill"></i>
+
+                                Remove
+
+                            </a>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+        {% empty %}
+
+        <h3 class="text-center">
+            Your Cart Is Empty 🛒
+        </h3>
+
+        {% endfor %}
+
+    </div>
+    
+
+</div>
+<div class="card shadow p-4 mt-5">
+
+    <h3>Cart Summary</h3>
+
+    <hr>
+
+    <h5>
+
+        Total Items :
+        {{ cart_items.count }}
+
+    </h5>
+
+    <h5>
+
+        Subtotal :
+        ₹{{ total }}
+
+    </h5>
+
+    <hr>
+
+    <h4 class="text-success">
+
+        Total :
+        ₹{{ total }}
+
+    </h4>
+
+    <a href="{% url 'checkout' %}"
+       class="btn btn-success btn-lg w-100 mt-3">
+
+        Proceed To Checkout
+
+    </a>
+
+</div>
+
+{% endblock %}

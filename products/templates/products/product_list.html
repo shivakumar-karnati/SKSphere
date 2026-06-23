@@ -1,0 +1,294 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block css %}
+
+<link rel="stylesheet"
+href="{% static 'css/products/product_list.css' %}">
+{% endblock %}
+
+{% block content %}
+
+<div class="container mt-5">
+
+
+<div class="d-flex justify-content-between align-items-center mb-4">
+
+    <div>
+
+        <h2 class="fw-bold">
+
+            All Products
+
+        </h2>
+
+        <p class="text-muted">
+
+            {{ products.paginator.count }} Products Found
+
+        </p>
+
+    </div>
+
+    <!-- Sort Dropdown -->
+
+    <form method="GET">
+
+        <input type="hidden"
+               name="q"
+               value="{{ request.GET.q }}">
+
+        <input type="hidden"
+               name="category"
+               value="{{ request.GET.category }}">
+
+        <input type="hidden"
+               name="price"
+               value="{{ request.GET.price }}">
+
+        <select
+            name="sort"
+            class="form-select shadow-sm"
+            style="width:220px"
+            onchange="this.form.submit()">
+
+            <option value="">
+                Sort Products
+            </option>
+
+            <option value="low"
+                {% if request.GET.sort == 'low' %}
+                selected
+                {% endif %}>
+                Price Low → High
+            </option>
+
+            <option value="high"
+                {% if request.GET.sort == 'high' %}
+                selected
+                {% endif %}>
+                Price High → Low
+            </option>
+
+            <option value="new"
+                {% if request.GET.sort == 'new' %}
+                selected
+                {% endif %}>
+                Newest First
+            </option>
+
+        </select>
+
+    </form>
+
+</div>
+
+<!-- FILTERS -->
+
+<div class="filter-box mb-4">
+
+    <form method="GET">
+
+        <div class="row g-3">
+
+            <div class="col-md-4">
+
+                <select
+                    name="category"
+                    class="form-select">
+
+                    <option value="">
+                        All Categories
+                    </option>
+
+                    {% for category in categories %}
+
+                    <option
+                        value="{{ category.id }}"
+                        {% if request.GET.category == category.id|stringformat:"s" %}
+                        selected
+                        {% endif %}>
+
+                        {{ category.name }}
+
+                    </option>
+
+                    {% endfor %}
+
+                </select>
+
+            </div>
+
+            <div class="col-md-4">
+
+                <select
+                    name="price"
+                    class="form-select">
+
+                    <option value="">
+                        Price Range
+                    </option>
+
+                    <option value="1">
+                        Under ₹500
+                    </option>
+
+                    <option value="2">
+                        ₹500 - ₹2000
+                    </option>
+
+                    <option value="3">
+                        Above ₹2000
+                    </option>
+
+                </select>
+
+            </div>
+
+            <div class="col-md-4">
+
+                <button
+                    class="btn btn-primary w-100">
+
+                    Apply Filters
+
+                </button>
+
+            </div>
+
+        </div>
+
+    </form>
+
+</div>
+
+<div class="row g-4">
+
+    {% for product in products %}
+
+    <div class="col-lg-3 col-md-4 col-sm-6">
+
+        <div class="card product-card h-100 border-0 shadow-sm">
+
+            <div class="product-img-container">
+
+                <img src="{{ product.image.url }}"
+                     class="card-img-top product-img">
+
+            </div>
+
+            <div class="card-body text-center">
+
+                <h5 class="fw-bold">
+
+                    {{ product.name }}
+
+                </h5>
+
+                <h4 class="text-primary fw-bold">
+
+                    ₹{{ product.price }}
+
+                </h4>
+
+                <a href="{% url 'product_detail' product.id %}"
+                   class="btn btn-primary mt-2">
+
+                    View Product
+
+                </a>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    {% empty %}
+
+    <div class="col-12 text-center py-5">
+
+        <h2>
+
+            🔍 No Products Found
+
+        </h2>
+
+        <p class="text-muted">
+
+            Try another search or filter.
+
+        </p>
+
+    </div>
+
+    {% endfor %}
+
+</div>
+
+<!-- PAGINATION -->
+
+{% if products.has_other_pages %}
+
+<div class="d-flex justify-content-center mt-5">
+
+    <nav>
+
+        <ul class="pagination">
+
+            {% if products.has_previous %}
+
+            <li class="page-item">
+
+                <a class="page-link"
+                   href="?page={{ products.previous_page_number }}&sort={{ request.GET.sort }}&q={{ request.GET.q }}&category={{ request.GET.category }}&price={{ request.GET.price }}">
+
+                    ← Previous
+
+                </a>
+
+            </li>
+
+            {% endif %}
+
+            {% for num in products.paginator.page_range %}
+
+            <li class="page-item {% if products.number == num %}active{% endif %}">
+
+                <a class="page-link"
+                   href="?page={{ num }}&sort={{ request.GET.sort }}&q={{ request.GET.q }}&category={{ request.GET.category }}&price={{ request.GET.price }}">
+
+                    {{ num }}
+
+                </a>
+
+            </li>
+
+            {% endfor %}
+
+            {% if products.has_next %}
+
+            <li class="page-item">
+
+                <a class="page-link"
+                   href="?page={{ products.next_page_number }}&sort={{ request.GET.sort }}&q={{ request.GET.q }}&category={{ request.GET.category }}&price={{ request.GET.price }}">
+
+                    Next →
+
+                </a>
+
+            </li>
+
+            {% endif %}
+
+        </ul>
+
+    </nav>
+
+</div>
+
+{% endif %}
+
+</div>
+
+{% endblock %}

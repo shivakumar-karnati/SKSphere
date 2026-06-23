@@ -1,0 +1,603 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block css %}
+<link rel="stylesheet"
+href="{% static 'css/products/dashboard.css' %}">
+{% endblock %}
+{% block content %}
+
+<div class="admin-profile-card mb-5">
+
+    <div class="profile-left">
+
+        <img src="https://ui-avatars.com/api/?name={{ request.user.username }}&background=2563eb&color=fff"
+             class="admin-avatar">
+
+        <div>
+
+            <h2>{{ request.user.username }}</h2>
+
+            <p class="mb-1">
+                Administrator
+            </p>
+
+            <small>
+                Last Login:
+                {{ request.user.last_login }}
+            </small>
+
+        </div>
+
+    </div>
+
+    <div class="profile-right">
+
+        <a href="/admin/orders/order/"
+           class="admin-btn">
+
+            📦 Orders
+
+        </a>
+
+        <a href="/admin/products/product/"
+           class="admin-btn">
+
+            🛒 Products
+
+        </a>
+
+        <a href="/admin/auth/user/"
+           class="admin-btn">
+
+            👥 Users
+
+        </a>
+
+        <a href="/admin/orders/payment/"
+           class="admin-btn">
+
+            💳 Payments
+
+        </a>
+
+    </div>
+
+</div>
+
+<div class="card quick-actions-card mt-5">
+
+    <div class="card-body">
+
+        <h3 class="quick-actions-title mb-4">
+            ⚡ Quick Actions
+        </h3>
+
+        <div class="quick-actions-grid">
+
+            <a href="/admin/products/category/add/"
+               class="action-btn category">
+
+                <i class="fas fa-folder-plus"></i>
+                Add Category
+
+            </a>
+
+            <a href="/admin/products/product/add/"
+               class="action-btn product">
+
+                <i class="fas fa-box-open"></i>
+                Add Product
+
+            </a>
+
+            <a href="/admin/orders/order/"
+               class="action-btn order">
+
+                <i class="fas fa-shopping-bag"></i>
+                Manage Orders
+
+            </a>
+
+            <a href="/admin/orders/coupon/"
+               class="action-btn coupon">
+
+                <i class="fas fa-ticket-alt"></i>
+                Coupons
+
+            </a>
+
+            <a href="/admin/orders/payment/"
+               class="action-btn payment">
+
+                <i class="fas fa-credit-card"></i>
+                Verify Payments
+
+            </a>
+
+        </div>
+
+    </div>
+
+</div>
+<div class="container mt-5">
+
+<h1 class="fw-bold text-center mb-5">
+
+    📊 SKSphere Dashboard
+
+</h1>
+
+<div class="row g-4">
+
+    <!-- Products -->
+
+    <div class="col-md-3">
+
+        <div class="card border-0 shadow dashboard-card products-card">
+
+            <div class="card-body text-center">
+
+                <h5>Total Products</h5>
+
+                <h1>{{ total_products }}</h1>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <!-- Users -->
+
+    <div class="col-md-3">
+
+        <div class="card border-0 shadow dashboard-card users-card">
+
+            <div class="card-body text-center">
+
+                <h5>Total Users</h5>
+
+                <h1>{{ total_users }}</h1>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <!-- Orders -->
+
+    <div class="col-md-3">
+
+        <div class="card border-0 shadow dashboard-card orders-card">
+
+            <div class="card-body text-center">
+
+                <h5>Total Orders</h5>
+
+                <h1>{{ total_orders }}</h1>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <!-- Revenue -->
+
+    <div class="col-md-3">
+
+        <div class="card border-0 shadow dashboard-card revenue-card">
+
+            <div class="card-body text-center">
+
+                <h5>Total Revenue</h5>
+
+                <h1>₹{{ total_revenue }}</h1>
+
+            </div>
+
+        </div>
+
+    </div>
+    <div class="col-md-3">
+        <div class="card border-0 shadow dashboard-card pending-card">
+
+            <div class="card-body text-center">
+
+                <h5>
+
+                    Pending Orders
+
+                </h5>
+
+                <h1>
+
+                    {{ pending_orders }}
+
+                </h1>
+
+            </div>
+
+        </div>
+
+    </div>
+    <div class="col-md-3">
+
+        <div class="card border-0 shadow dashboard-card shipped-card">
+
+            <div class="card-body text-center">
+
+                <h5>
+
+                    Shipped Orders
+
+                </h5>
+
+                <h1>
+
+                    {{ shipped_orders }}
+
+                </h1>
+
+            </div>
+
+        </div>
+
+    </div>
+    <div class="col-md-3">
+
+        <div class="card border-0 shadow dashboard-card shipped-card">
+
+            <div class="card-body text-center">
+
+                <h5>
+
+                    Low Stock Products
+
+                </h5>
+
+                <h1>
+
+                    {{ low_stock_products.count }}
+
+                </h1>
+
+            </div>
+
+        </div>
+
+    </div>
+    <div class="col-md-3">
+
+        <div class="card border-0 shadow dashboard-card shipped-card">
+
+            <div class="card-body text-center">
+
+                <h5>
+
+                    Out of Stock
+
+                </h5>
+
+                <h1>
+
+                    {{ out_of_stock_products.count }}
+
+                </h1>
+
+            </div>
+
+        </div>
+
+    </div>
+    <div class="col-md-3">
+
+
+        <div class="card border-0 shadow dashboard-card delivered-card">
+
+            <div class="card-body text-center">
+
+                <h5>
+
+                    Delivered Orders
+
+                </h5>
+
+                <h1>
+
+                    {{ delivered_orders }}
+
+                </h1>
+
+            </div>
+
+        </div>
+    
+
+    </div>
+    <div class="col-md-3">
+
+
+        <div class="card border-0 shadow dashboard-card cancelled-card">
+
+            <div class="card-body text-center">
+
+                <h5>
+
+                    Cancelled Orders
+
+                </h5>
+
+                <h1>
+
+                    {{ cancelled_orders }}
+
+                </h1>
+
+            </div>
+
+        </div>
+    
+
+    </div>
+
+</div>
+<div class="row mt-5 g-4">
+
+    <!-- Low Stock -->
+    <div class="col-lg-4">
+
+        <div class="card dashboard-box">
+
+            <div class="card-body">
+
+                <h4>⚠ Low Stock Products</h4>
+
+                <div class="scroll-area">
+
+                    {% for product in low_stock_products %}
+
+                    <div class="alert alert-danger py-2 mb-2">
+
+                        {{ product.name }}
+                        ({{ product.stock }})
+
+                    </div>
+
+                    {% empty %}
+
+                    <div class="alert alert-success">
+
+                        All Products In Stock
+
+                    </div>
+
+                    {% endfor %}
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <!-- Top Selling -->
+
+    <div class="col-lg-4">
+
+        <div class="card dashboard-box">
+
+            <div class="card-body">
+
+                <h4>🔥 Top Selling</h4>
+
+                <div class="scroll-area">
+
+                    {% for product in top_products %}
+
+                    <div class="selling-item">
+
+                        <span>
+
+                            {{ product.product__name }}
+
+                        </span>
+
+                        <strong>
+
+                            {{ product.sold }}
+
+                        </strong>
+
+                    </div>
+
+                    {% endfor %}
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <!-- Reviews -->
+
+    <div class="col-lg-4">
+
+        <div class="card dashboard-box">
+
+            <div class="card-body">
+
+                <h4>⭐ Recent Reviews</h4>
+
+                <div class="scroll-area">
+
+                    {% for review in recent_reviews %}
+
+                    <div class="review-item">
+
+                        <strong>
+
+                            {{ review.user.username }}
+
+                        </strong>
+
+                        <small>
+
+                            {{ review.rating }}⭐
+
+                        </small>
+
+                        <p>
+
+                            {{ review.comment|truncatechars:50 }}
+
+                        </p>
+
+                    </div>
+
+                    {% endfor %}
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+<div class="card shadow p-4 mt-5">
+
+    <h3 class="mb-4">
+
+        📈 Monthly Sales
+
+    </h3>
+
+    <img src="{{ chart_url }}"
+         class="sales-chart" alt="Sales Chart">
+
+</div>
+<!-- Recent Orders -->
+
+<div class="card shadow border-0 mt-5">
+
+    <div class="card-body">
+
+        <h3 class="mb-4">
+
+            Recent Orders
+
+        </h3>
+
+        <table class="table table-hover align-middle">
+
+            <thead>
+
+                <tr>
+
+                    <th>Order ID</th>
+
+                    <th>Customer</th>
+
+                    <th>Amount</th>
+
+                    <th>Status</th>
+
+                    <th>Date</th>
+
+                </tr>
+
+            </thead>
+
+            <tbody>
+
+                {% for order in recent_orders %}
+
+                <tr>
+
+                    <td>
+
+                        #{{ order.id }}
+
+                    </td>
+
+                    <td>
+
+                        {{ order.full_name }}
+
+                    </td>
+
+                    <td>
+
+                        ₹{{ order.total_amount }}
+
+                    </td>
+
+                    <td>
+
+                        {% if order.status == "payment Verification" %}
+
+                        <span class="badge bg-warning">
+
+                            payment Verification
+
+                        </span>
+
+                        {% elif order.status == "Processing" %}
+
+                        <span class="badge bg-primary">
+
+                            Processing
+
+                        </span>
+                        {% elif order.status == "shipped" %}
+                        <span class="badge bg-primary">
+
+                            shipped
+
+                        </span>
+                        {% elif order.status == "Delivered" %}
+                        <span class="badge bg-success">
+
+                            Delivered
+
+                        </span>
+
+                        {% else %}
+
+                        <span class="badge bg-danger">
+
+                            Cancelled
+
+                        </span>
+
+                        {% endif %}
+
+                    </td>
+
+                    <td>
+
+                        {{ order.created_at }}
+
+                    </td>
+
+                </tr>
+
+                {% endfor %}
+
+            </tbody>
+
+        </table>
+
+    </div>
+
+</div>
+
+</div>
+
+{% endblock %}

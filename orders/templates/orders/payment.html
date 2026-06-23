@@ -1,0 +1,151 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block css %}
+
+<link rel="stylesheet"
+      href="{% static 'css/orders/payment.css' %}">
+{% endblock %}
+
+{% block content %}
+
+<div class="payment-bg">
+
+
+<div class="container py-5">
+
+    <div class="row g-4 justify-content-center">
+
+        <!-- PAYMENT CARD -->
+
+        <div class="col-lg-7">
+
+            <div class="payment-card">
+
+                <div class="payment-header">
+
+                    <div class="payment-icon">
+                        💳
+                    </div>
+
+                    <h2>
+                        Secure Payment
+                    </h2>
+
+                    <p>
+                        Complete your payment using any UPI App
+                    </p>
+
+                </div>
+
+                <div class="qr-box">
+
+                    <img
+                        src="data:image/png;base64,{{ qr_code }}"
+                        class="qr-image">
+
+                </div>
+
+                <div class="amount-box">
+
+                    <span>
+                        Total Payable
+                    </span>
+
+                    <h1>
+                        ₹{{ total }}
+                    </h1>
+
+                </div>
+
+                {% if request.session.buy_now_product %}
+
+                <div class="order-type buy-now">
+
+                    ⚡ Buy Now Order
+
+                </div>
+
+                {% else %}
+
+                <div class="order-type cart-order">
+
+                    🛒 Cart Order
+
+                </div>
+
+                {% endif %}
+
+                <div class="payment-apps">
+
+                    <span>PhonePe</span>
+                    <span>Google Pay</span>
+                    <span>Paytm</span>
+
+                </div>
+
+            </div>
+
+        </div>
+
+        <!-- UPLOAD CARD -->
+
+        <div class="col-lg-5">
+
+            <div class="upload-card">
+
+                <h3>
+                    Upload Payment Proof
+                </h3>
+
+                <p>
+                    After payment upload your screenshot.
+                </p>
+
+                {% if request.session.buy_now_product %}
+
+                <form method="POST"
+                      action="{% url 'place_buy_now_order' %}"
+                      enctype="multipart/form-data">
+
+                {% else %}
+
+                <form method="POST"
+                      action="{% url 'place_order' %}"
+                      enctype="multipart/form-data">
+
+                {% endif %}
+
+                    {% csrf_token %}
+
+                    <div class="upload-area">
+
+                        <input
+                            type="file"
+                            name="screenshot"
+                            required
+                            class="form-control">
+
+                    </div>
+
+                    <button
+                        class="payment-btn">
+
+                        🚀 Place Order
+
+                    </button>
+
+                </form>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+</div>
+
+{% endblock %}

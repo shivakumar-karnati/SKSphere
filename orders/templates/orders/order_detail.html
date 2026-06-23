@@ -1,0 +1,117 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block css %}
+<link rel="stylesheet"
+      href="{% static 'css/orders/order_detail.css' %}">
+{% endblock %}
+
+{% block content %}
+
+<div class="container py-5">
+
+    <div class="tracking-card">
+
+        <h2>
+            Order #{{ order.id }}
+        </h2>
+
+        <p>
+            Ordered on {{ order.created_at }}
+        </p>
+
+        <div class="tracking-wrapper">
+
+            <div class="step {% if order.status == 'Payment Verification' or order.status == 'Processing' or order.status == 'Shipped' or order.status == 'Delivered' %}active{% endif %}">
+                <div class="circle">1</div>
+                <span>Payment Verification</span>
+            </div>
+
+            <div class="line"></div>
+
+            <div class="step {% if order.status == 'Processing' or order.status == 'Shipped' or order.status == 'Delivered' %}active{% endif %}">
+                <div class="circle">2</div>
+                <span>Processing</span>
+            </div>
+
+            <div class="line"></div>
+
+            <div class="step {% if order.status == 'Shipped' or order.status == 'Delivered' %}active{% endif %}">
+                <div class="circle">3</div>
+                <span>Shipped</span>
+            </div>
+
+            <div class="line"></div>
+
+            <div class="step {% if order.status == 'Delivered' %}active{% endif %}">
+                <div class="circle">4</div>
+                <span>Delivered</span>
+            </div>
+
+        </div>
+
+        <hr>
+
+        <h4>
+            Shipping Details
+        </h4>
+
+        <p><strong>Name:</strong> {{ order.full_name }}</p>
+
+        <p><strong>Phone:</strong> {{ order.phone }}</p>
+
+        <p><strong>City:</strong> {{ order.city }}</p>
+
+        <p><strong>Address:</strong> {{ order.address }}</p>
+
+        <p><strong>Status:</strong> {{ order.status }}</p>
+
+        <hr>
+        <h4>Payment Method : {{order.payment_method}}</h4>
+        <hr>
+        <h4>
+            Products
+        </h4>
+
+        {% for item in order.orderitem_set.all %}
+
+        <div class="product-box">
+
+            <img src="{{ item.product.image.url }}"
+                 class="product-image">
+
+            <div>
+
+                <h5>
+                    {{ item.product.name }}
+                </h5>
+
+                <p>
+                    Qty : {{ item.quantity }}
+                </p>
+
+                <p>
+                    ₹{{ item.price }}
+                </p>
+                <a href="{% url 'download_invoice' order.id %}"
+                class="btn btn-success">
+
+                    📄 Download Invoice
+
+                </a>
+
+            </div>
+
+        </div>
+
+        {% endfor %}
+
+        <h3 class="total-price">
+            Total ₹{{ order.total_amount }}
+        </h3>
+
+    </div>
+
+</div>
+
+{% endblock %}

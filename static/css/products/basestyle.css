@@ -1,0 +1,186 @@
+body{
+    background:
+    linear-gradient(
+    135deg,
+    #f8fafc,
+    #e2e8f0
+    );
+}
+:root{
+
+    --primary:#2563eb;
+    --secondary:#38bdf8;
+
+    --dark:#111827;
+    --dark-light:#1f2937;
+
+    --light:#f8fafc;
+    --white:#ffffff;
+
+    --success:#22c55e;
+    --warning:#f59e0b;
+    --danger:#ef4444;
+
+    --shadow:
+    0 10px 30px rgba(0,0,0,.1);
+
+}
+.navbar{
+    background:var(--dark);
+}
+
+.category-card{
+    background:var(--white);
+    box-shadow:var(--shadow);
+}
+
+.shop-btn{
+    background:var(--primary);
+    color:var(--white);
+}
+.navbar-brand img{
+    border-radius:50%;
+    transition:0.3s;
+}
+
+.navbar-brand img:hover{
+    transform:scale(1.1);
+}
+/* =========================
+   PREMIUM USER DROPDOWN
+========================= */
+
+.user-menu{
+    display:flex;
+    align-items:center;
+    gap:10px;
+    font-weight:600;
+}
+
+.user-avatar{
+    width:40px;
+    height:40px;
+
+    border-radius:50%;
+
+    display:flex;
+    align-items:center;
+    justify-content:center;
+
+    background:linear-gradient(
+        135deg,
+        #2563eb,
+        #4f46e5
+    );
+
+    color:white;
+    font-weight:700;
+    font-size:1rem;
+
+    box-shadow:
+    0 5px 15px rgba(37,99,235,.3);
+}
+
+.user-dropdown-menu{
+
+    min-width:250px;
+
+    border:none;
+    border-radius:20px;
+
+    overflow:hidden;
+
+    margin-top:15px;
+
+    box-shadow:
+    0 15px 40px rgba(0,0,0,.12);
+
+    animation:dropdownFade .3s ease;
+}
+
+.dropdown-header{
+    padding:15px 20px;
+}
+
+.dropdown-item{
+
+    padding:12px 20px;
+
+    font-weight:500;
+
+    transition:.3s;
+}
+
+.dropdown-item i{
+    margin-right:10px;
+    color:#2563eb;
+}
+
+.dropdown-item:hover{
+
+    background:#eef4ff;
+
+    color:#2563eb;
+
+    transform:translateX(5px);
+}
+
+@keyframes dropdownFade{
+
+    from{
+        opacity:0;
+        transform:translateY(15px);
+    }
+
+    to{
+        opacity:1;
+        transform:translateY(0);
+    }
+}
+
+
+.cart-badge{
+
+    position:absolute;
+
+    top:-5px;
+    right:-10px;
+
+    background:#ef4444;
+
+    color:white;
+
+    min-width:22px;
+    height:22px;
+
+    border-radius:50%;
+
+    display:flex;
+
+    align-items:center;
+    justify-content:center;
+
+    font-size:.75rem;
+
+    font-weight:700;
+
+    box-shadow:
+    0 0 15px rgba(239,68,68,.5);
+
+    animation:pulse 1.5s infinite;
+}
+
+@keyframes pulse{
+
+    0%{
+        transform:scale(1);
+    }
+
+    50%{
+        transform:scale(1.15);
+    }
+
+    100%{
+        transform:scale(1);
+    }
+}

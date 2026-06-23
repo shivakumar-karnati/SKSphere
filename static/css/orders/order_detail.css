@@ -1,0 +1,79 @@
+.tracking-card{
+    background:#fff;
+    border-radius:20px;
+    padding:30px;
+    box-shadow:0 10px 30px rgba(0,0,0,.1);
+}
+
+.tracking-wrapper{
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    margin:40px 0;
+    flex-wrap:wrap;
+}
+
+.step{
+    text-align:center;
+}
+
+.circle{
+    width:60px;
+    height:60px;
+    border-radius:50%;
+    background:#ddd;
+    color:#fff;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-weight:700;
+    margin:auto;
+    transition:.4s;
+}
+
+.step.active .circle{
+    background:linear-gradient(
+        135deg,
+        #00c853,
+        #00e676
+    );
+
+    box-shadow:
+    0 0 20px #00e676;
+}
+
+.step span{
+    display:block;
+    margin-top:10px;
+    font-weight:600;
+}
+
+.line{
+    width:100px;
+    height:4px;
+    background:#ddd;
+    margin:0 15px;
+}
+
+.product-box{
+    display:flex;
+    gap:20px;
+    align-items:center;
+    margin-bottom:20px;
+    padding:15px;
+    border-radius:15px;
+    background:#f8f9fa;
+}
+
+.product-image{
+    width:90px;
+    height:90px;
+    object-fit:cover;
+    border-radius:10px;
+}
+
+.total-price{
+    color:#198754;
+    margin-top:30px;
+    font-weight:700;
+}

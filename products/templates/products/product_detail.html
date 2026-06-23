@@ -1,0 +1,343 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block css %}
+<link rel="stylesheet"
+href="{% static 'css/products/productdetail.css' %}">
+{% endblock %}
+{% block content %}
+
+<div class="container mt-5">
+
+    <div class="row">
+
+        <div class="col-md-6">
+
+            <img src="{{ product.image.url }}"
+                 class="img-fluid product-image">
+
+        </div>
+
+        <div class="col-md-6">
+
+            <h1>
+                {{ product.name }}
+            </h1>
+
+            <h3 class="text-primary">
+                ₹{{ product.price }}
+            </h3>
+            <h5 class="text-warning">
+
+                ⭐ {{ average_rating|default:"0"|floatformat:1 }}/5
+
+            </h5>
+            
+
+            <p>
+                {{ product.description }}
+            </p>
+
+            {% if product.stock > 0 %}
+
+                <span class="badge bg-success">
+                    In Stock
+                </span>
+
+                {% else %}
+
+                <span class="badge bg-danger">
+                    Out Of Stock
+                </span>
+
+            {% endif %}
+            {% if product.stock <= 5 and product.stock > 0 %}
+
+                <div class="alert alert-warning mt-2">
+
+                    Only {{ product.stock }} items left!
+
+                </div>
+
+            {% endif %}
+            {% if product.stock > 0 %}
+                <a href="{% url 'add_to_cart' product.id %}"
+                class="btn btn-success btn-lg mt-3">
+
+                    <i class="bi bi-cart-plus-fill"></i>
+                    Add To Cart
+
+                </a>
+                <a href="{% url 'buy_now' product.id %}"
+                class="btn btn-warning btn-lg mt-3 w-100">
+
+                    <i class="bi bi-lightning-charge-fill"></i>
+
+                    Buy Now
+
+                </a>
+            {% else %}
+                        <button
+                        class="btn btn-danger"
+                        disabled>
+
+                            Out Of Stock
+
+                        </button>
+
+            {% endif %}
+            <a href="{% url 'add_to_wishlist' product.id %}"
+            class="btn btn-danger btn-lg mt-3">
+
+                ❤️ Add To Wishlist
+
+            </a>
+            <div class="mt-5">
+
+                <h3>
+
+                    Write A Review
+
+                </h3>
+
+                {% if user.is_authenticated %}
+
+                        {% if purchased %}
+                        {% if messages %}
+
+                            {% for message in messages %}
+
+                                <div class="alert alert-{{ message.tags }}">
+
+                                    {{ message }}
+
+                                </div>
+
+                            {% endfor %}
+
+                        {% endif %}
+
+                            <form
+                                method="POST"
+                                action="{% url 'add_review' product.id %}">
+
+                                {% csrf_token %}
+
+                                <div class="mb-3">
+
+                                    <label class="fw-bold">
+                                        Rating
+                                    </label>
+
+                                    <select
+                                        name="rating"
+                                        class="form-select"
+                                        required>
+
+                                        <option value="5">
+                                            ⭐⭐⭐⭐⭐ (5)
+                                        </option>
+
+                                        <option value="4">
+                                            ⭐⭐⭐⭐ (4)
+                                        </option>
+
+                                        <option value="3">
+                                            ⭐⭐⭐ (3)
+                                        </option>
+
+                                        <option value="2">
+                                            ⭐⭐ (2)
+                                        </option>
+
+                                        <option value="1">
+                                            ⭐ (1)
+                                        </option>
+
+                                    </select>
+
+                                </div>
+
+                                <textarea
+                                    name="comment"
+                                    class="form-control"
+                                    rows="4"
+                                    placeholder="Write your review..."
+                                    required></textarea>
+
+                                <button
+                                    class="btn btn-primary mt-3">
+
+                                    Submit Review
+
+                                </button>
+
+                            </form>
+
+                        {% else %}
+
+                            <div class="alert alert-warning">
+
+                                📦 You can review this product only after
+                                purchasing and receiving it.
+
+                            </div>
+
+                        {% endif %}
+
+                    {% else %}
+
+                        <div class="alert alert-info">
+
+                            Please login to submit a review.
+
+                        </div>
+
+                    {% endif %}
+                <hr>
+
+                <h3 class="mt-5 review-title">
+                    Customer Reviews
+                </h3>
+
+                <div class="reviews-scroll">
+                    {% for review in reviews %}
+
+                    <div class="review-card">
+
+                        <div class="review-header">
+
+                            <div class="review-user">
+
+                                <div class="avatar">
+                                    {{ review.user.username|first|upper }}
+                                </div>
+
+                                <div>
+                                    <h6>{{ review.user.username }}</h6>
+                                    <small>{{ review.created_at|date:"d M Y" }}</small>
+                                </div>
+
+                            </div>
+
+                            <div class="rating-stars">
+
+                                {% for i in "12345" %}
+
+                                    {% if forloop.counter <= review.rating %}
+                                        <i class="bi bi-star-fill"></i>
+                                    {% else %}
+                                        <i class="bi bi-star"></i>
+                                    {% endif %}
+
+                                {% endfor %}
+
+                            </div>
+
+                        </div>
+
+                        <p class="review-comment">
+                            {{ review.comment }}
+                        </p>
+
+                        {% if user == review.user %}
+                        <div class="review-actions">
+
+                            <a href="{% url 'edit_review' review.id %}"
+                            class="edit-btn">
+
+                                ✏️
+
+                            </a>
+
+                            <a href="{% url 'delete_review' review.id %}"
+                            class="delete-btn"
+                            onclick="return confirm('Delete this review?')">
+
+                                🗑
+
+                            </a>
+
+                        </div>
+                        {% endif %}
+
+                    </div>
+
+                    {% empty %}
+                        <p>No reviews yet.</p>
+                    {% endfor %}
+                </div>
+
+                
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+<section class="related-products mt-5">
+
+    <h2 class="text-center mb-5">
+
+        Related Products
+
+    </h2>
+
+    <div class="row">
+
+        {% for item in related_products %}
+
+        <div class="col-md-3 mb-4">
+
+            <div class="card related-card">
+
+                <img src="{{ item.image.url }}"
+                     class="card-img-top related-img">
+
+                <div class="card-body text-center">
+
+                    <h5>
+
+                        {{ item.name }}
+
+                    </h5>
+
+                    <h6 class="text-primary">
+
+                        ₹{{ item.price }}
+
+                    </h6>
+
+                    <a href="{% url 'product_detail' item.id %}"
+                       class="btn btn-primary">
+
+                        View Product
+
+                    </a>
+
+                </div>
+
+            </div>
+
+        </div>
+
+        {% empty %}
+
+        <div class="text-center">
+
+            <h4>
+
+                No Related Products
+
+            </h4>
+
+        </div>
+
+        {% endfor %}
+
+    </div>
+
+</section>
+
+{% endblock %}

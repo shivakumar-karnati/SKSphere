@@ -1,0 +1,187 @@
+body{
+    background:#f4f7ff;
+}
+
+/* Title */
+
+.checkout-title{
+    font-weight:800;
+    font-size:3rem;
+    background:linear-gradient(
+        135deg,
+        #2563eb,
+        #7c3aed
+    );
+    -webkit-background-clip:text;
+    -webkit-text-fill-color:transparent;
+}
+
+/* Cards */
+
+.checkout-card,
+.summary-card{
+    background:white;
+    border-radius:30px;
+    padding:30px;
+    box-shadow:
+    0 15px 50px rgba(
+        37,
+        99,
+        235,
+        .12
+    );
+
+    transition:.4s;
+}
+
+.checkout-card:hover,
+.summary-card:hover{
+    transform:translateY(-8px);
+}
+
+/* Product Image */
+
+.product-image{
+    width:100%;
+    height:300px;
+    object-fit:cover;
+    border-radius:20px;
+    transition:.5s;
+}
+
+.product-image:hover{
+    transform:scale(1.05);
+}
+
+/* Price */
+
+.price{
+    color:#2563eb;
+    font-weight:800;
+}
+
+/* Quantity */
+
+.qty-box{
+    display:flex;
+    align-items:center;
+    gap:15px;
+}
+
+.qty-btn{
+    width:45px;
+    height:45px;
+    border-radius:50%;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    color:white;
+    text-decoration:none;
+    font-size:20px;
+}
+
+.plus{
+    background:#16a34a;
+}
+
+.minus{
+    background:#ef4444;
+}
+
+.qty-number{
+    font-size:1.5rem;
+    font-weight:700;
+}
+
+/* Summary */
+
+.summary-row{
+    display:flex;
+    justify-content:space-between;
+    margin-bottom:15px;
+}
+
+.final-total{
+    font-size:1.3rem;
+    font-weight:800;
+    color:#2563eb;
+}
+
+/* Inputs */
+
+.form-control{
+    border-radius:15px;
+    padding:12px;
+}
+
+/* Payment Button */
+
+.payment-btn{
+    width:100%;
+    margin-top:20px;
+    border:none;
+    border-radius:15px;
+    padding:15px;
+    font-size:18px;
+    font-weight:700;
+
+    color:white;
+
+    background:linear-gradient(
+        135deg,
+        #16a34a,
+        #22c55e
+    );
+
+    transition:.4s;
+}
+
+.payment-btn:hover{
+    transform:translateY(-4px);
+    box-shadow:
+    0 10px 25px rgba(
+        34,
+        197,
+        94,
+        .4
+    );
+}
+
+/* Animation */
+
+.checkout-card,
+.summary-card{
+    animation:fadeUp .8s ease;
+}
+
+@keyframes fadeUp{
+
+    from{
+        opacity:0;
+        transform:
+        translateY(40px);
+    }
+
+    to{
+        opacity:1;
+        transform:
+        translateY(0);
+    }
+}
+
+.shipping-card{
+    margin-top:20px;
+}
+
+.shipping-card h3{
+    color:#2563eb;
+    font-weight:700;
+}
+
+.shipping-card .form-control{
+    margin-bottom:15px;
+}
+
+.shipping-card{
+    animation:fadeUp .9s ease;
+}

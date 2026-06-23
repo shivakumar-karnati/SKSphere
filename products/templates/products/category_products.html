@@ -1,0 +1,126 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block css %}
+<link rel="stylesheet"
+href="{% static 'css/products/category_products.css' %}">
+{% endblock %}
+
+{% block content %}
+
+<div class="category-page">
+
+    <div class="container">
+
+        <div class="page-header">
+
+            <h1>
+                🛍 Explore Products
+            </h1>
+
+            <p>
+                Discover premium products from SKSphere
+            </p>
+
+        </div>
+
+        <!-- Categories -->
+
+        <div class="category-chips">
+
+            <a href="{% url 'products' %}"
+               class="chip">
+
+                ✨ All Products
+
+            </a>
+
+            {% for category in categories %}
+
+            <a href="{% url 'category_products' category.id %}"
+               class="chip">
+
+                {{ category.name }}
+
+            </a>
+
+            {% endfor %}
+
+        </div>
+
+        <!-- Products -->
+
+        <div class="row g-4 mt-3">
+
+            {% for product in products %}
+
+            <div class="col-lg-3 col-md-4 col-sm-6">
+
+                <div class="product-card">
+
+                    <div class="product-image">
+
+                        <img
+                            src="{{ product.image.url }}"
+                            alt="{{ product.name }}">
+
+                    </div>
+
+                    <div class="product-content">
+
+                        <h5>
+
+                            {{ product.name }}
+
+                        </h5>
+
+                        <h4>
+
+                            ₹{{ product.price }}
+
+                        </h4>
+
+                        <a href="{% url 'product_detail' product.id %}"
+                           class="view-btn">
+
+                            View Product
+
+                        </a>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+            {% empty %}
+
+            <div class="col-12">
+
+                <div class="empty-box">
+
+                    <h2>
+
+                        🔍 No Products Found
+
+                    </h2>
+
+                    <p>
+
+                        Try another category.
+
+                    </p>
+
+                </div>
+
+            </div>
+
+            {% endfor %}
+
+        </div>
+
+    </div>
+
+</div>
+
+{% endblock %}
