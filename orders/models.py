@@ -176,60 +176,66 @@ def order_status_email(sender, instance, created, **kwargs):
     if not created:
 
         if instance.status == "Shipped":
+            try:
+                send_mail(
+                    f"Order #{instance.id} Shipped",
 
-            send_mail(
-                f"Order #{instance.id} Shipped",
+                        f"""
+                    Hello {instance.full_name},
 
-                    f"""
-                Hello {instance.full_name},
+                    Your order has been shipped.
 
-                Your order has been shipped.
+                    Order ID: {instance.id}
 
-                Order ID: {instance.id}
+                    Thank you for shopping with SKSphere.
+                            """,
 
-                Thank you for shopping with SKSphere.
-                        """,
+                    None,
 
-                None,
-
-                [instance.user.email]
-            )
+                    [instance.user.email]
+                )
+            except Exception as e:
+                print("Email sending failed:", e)
         elif instance.status == "Delivered":
+            try:
+                send_mail(
+                        f"Order #{instance.id} Delivered",
 
-            send_mail(
-                    f"Order #{instance.id} Delivered",
-
-                    f"""
-            Hello {instance.full_name},
-
-            Your order has been delivered.
-
-            We hope you enjoy your purchase.
-
-            Thank you for choosing SKSphere.
-            """,
-
-            None,
-
-            [instance.user.email]
-            )
-
-        elif instance.status == "Cancelled":
-
-            send_mail(
-                f"Order #{instance.id} Cancelled",
-
-                f"""
+                        f"""
                 Hello {instance.full_name},
 
-                Your order has been cancelled.
+                Your order has been delivered.
 
-                Order ID: {instance.id}
+                We hope you enjoy your purchase.
 
-                If this was a mistake, please contact support.
+                Thank you for choosing SKSphere.
                 """,
 
                 None,
 
                 [instance.user.email]
-            )
+                )
+            except Exception as e:
+                print("Email sending failed:", e)
+
+        elif instance.status == "Cancelled":
+            try:
+                send_mail(
+                    f"Order #{instance.id} Cancelled",
+
+                    f"""
+                    Hello {instance.full_name},
+
+                    Your order has been cancelled.
+
+                    Order ID: {instance.id}
+
+                    If this was a mistake, please contact support.
+                    """,
+
+                    None,
+
+                    [instance.user.email]
+                )
+            except Exception as e:
+                print("Email sending failed:", e)

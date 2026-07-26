@@ -260,20 +260,22 @@ def change_password(request):
         if form.is_valid():
 
             user = form.save()
+            try:
+                send_mail(
+                        "Password Changed",
 
-            send_mail(
-                    "Password Changed",
+                        """
+                    Your SKSphere password was changed successfully.
 
-                    """
-                Your SKSphere password was changed successfully.
+                    If this wasn't you, contact support immediately.
+                    """,
 
-                If this wasn't you, contact support immediately.
-                """,
+                        None,
 
-                    None,
-
-                    [user.email]
-                )
+                        [user.email]
+                    )
+            except Exception as e:
+                print("Email sending failed:", e)
 
             update_session_auth_hash(
                 request,
@@ -342,19 +344,21 @@ def forgot_password(request):
                 request.session["reset_otp"] = otp
                 request.session["otp_time"] = int(time())
                 request.session["reset_step"] = "otp"
+                try:
+                    send_mail(
+                        "SKSphere Password Reset OTP",
+                        f"""
+                    Your OTP is: {otp}
 
-                send_mail(
-                    "SKSphere Password Reset OTP",
-                    f"""
-                Your OTP is: {otp}
+                    This OTP is valid for 5 minutes.
 
-                This OTP is valid for 5 minutes.
-
-                Do not share this OTP with anyone.
-                                    """,
-                    None,
-                    [email]
-                )
+                    Do not share this OTP with anyone.
+                                        """,
+                        None,
+                        [email]
+                    )
+                except Exception as e:
+                    print("Email sending failed:", e)
 
                 messages.success(
                     request,
@@ -391,18 +395,19 @@ def forgot_password(request):
                 request.session["reset_otp"] = otp
                 request.session["otp_time"] = int(time())
                 request.session["reset_step"] = "otp"
+                try:
+                    send_mail(
+                        "SKSphere Password Reset OTP",
+                        f"""
+                        Your new OTP is: {otp}
 
-                send_mail(
-                    "SKSphere Password Reset OTP",
-                    f"""
-                    Your new OTP is: {otp}
-
-                    This OTP is valid for 5 minutes.
-                                """,
-                    None,
-                    [email]
-                )
-
+                        This OTP is valid for 5 minutes.
+                                    """,
+                        None,
+                        [email]
+                    )
+                except Exception as e:
+                    print("Email sending failed:", e)
                 messages.success(
                     request,
                     "New OTP sent successfully."
@@ -544,18 +549,19 @@ def forgot_password(request):
                 )
 
                 user.save()
+                try:
+                    send_mail(
+                        "Password Changed Successfully",
+                        """
+                        Your SKSphere password has been changed.
 
-                send_mail(
-                    "Password Changed Successfully",
-                    """
-                    Your SKSphere password has been changed.
-
-                    If this wasn't you, contact support immediately.
-                    """,
-                    None,
-                    [user.email]
-                )
-
+                        If this wasn't you, contact support immediately.
+                        """,
+                        None,
+                        [user.email]
+                    )
+                except Exception as e:
+                    print("Email sending failed:", e)
                 request.session.pop(
                     "reset_email",
                     None
