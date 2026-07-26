@@ -169,7 +169,7 @@ MEDIA_ROOT = BASE_DIR / 'media'
 
 
 UPI_ID = "9912061912@ptsbi"
-EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 
 EMAIL_HOST = config('EMAIL_HOST', default='smtp.gmail.com')
 
