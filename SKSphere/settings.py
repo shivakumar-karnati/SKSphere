@@ -27,24 +27,21 @@ SECRET_KEY = os.environ.get(
     'django-insecure-local-development-key'
 )
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = os.environ.get(
+DEBUG = config(
     'DEBUG',
-    'True'
-) == 'True'
-
+    default=False,
+    cast=bool
+)
 ALLOWED_HOSTS = [
-    'localhost',
-    '127.0.0.1',
+    "localhost",
+    "127.0.0.1",
+    "sksphere.onrender.com",
 ]
 
-render_hostname = os.environ.get(
-    'RENDER_EXTERNAL_HOSTNAME'
-)
+render_hostname = os.environ.get("RENDER_EXTERNAL_HOSTNAME")
 
 if render_hostname:
     ALLOWED_HOSTS.append(render_hostname)
-
-
 # Application definition
 
 INSTALLED_APPS = [
@@ -142,13 +139,24 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.2/howto/static-files/
 
-STATIC_URL = 'static/'
+# Static files
+
+STATIC_URL = '/static/'
 
 STATIC_ROOT = BASE_DIR / 'staticfiles'
 
-STATICFILES_STORAGE = (
-    'whitenoise.storage.CompressedManifestStaticFilesStorage'
-)
+STATICFILES_DIRS = [
+    BASE_DIR / 'static',
+]
+
+STORAGES = {
+    "default": {
+        "BACKEND": "django.core.files.storage.FileSystemStorage",
+    },
+    "staticfiles": {
+        "BACKEND": "whitenoise.storage.CompressedManifestStaticFilesStorage",
+    },
+}
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field
@@ -159,24 +167,32 @@ MEDIA_URL = '/media/'
 MEDIA_ROOT = BASE_DIR / 'media'
 
 
-STATICFILES_DIRS = [
-    BASE_DIR / 'static',
-]
-
-STATIC_ROOT = BASE_DIR / 'staticfiles'
 
 UPI_ID = "9912061912@ptsbi"
-
-
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 
-EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_HOST = config('EMAIL_HOST', default='smtp.gmail.com')
 
-EMAIL_PORT = 587
+EMAIL_PORT = config(
+    'EMAIL_PORT',
+    default=587,
+    cast=int
+)
 
-EMAIL_USE_TLS = True
+EMAIL_USE_TLS = config(
+    'EMAIL_USE_TLS',
+    default=True,
+    cast=bool
+)
 
-EMAIL_HOST_USER = config('EMAIL_HOST_USER')
+EMAIL_HOST_USER = config(
+    'EMAIL_HOST_USER',
+    default=''
+)
 
-EMAIL_HOST_PASSWORD = config('EMAIL_HOST_PASSWORD')
+EMAIL_HOST_PASSWORD = config(
+    'EMAIL_HOST_PASSWORD',
+    default=''
+)
+
 DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
