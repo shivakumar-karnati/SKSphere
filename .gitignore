@@ -1,6 +1,36 @@
-venv/
-db.sqlite3
+# Python
 __pycache__/
+*.py[cod]
 *.pyc
+# Django
+db.sqlite3
+
+# Media
 media/
+
+# Virtual Environment
+venv/
+env/
+.venv/
+
+# Environment Variables
 .env
+
+# VS Code
+.vscode/
+
+# PyCharm
+.idea/
+
+# Logs
+*.log
+
+# Migrations cache
+*.sqlite3
+
+# Static collected files
+staticfiles/
+
+# OS files
+.DS_Store
+Thumbs.db

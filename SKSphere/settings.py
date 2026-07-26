@@ -12,7 +12,8 @@ https://docs.djangoproject.com/en/5.2/ref/settings/
 
 from pathlib import Path
 from decouple import config
-
+import os
+import dj_database_url
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -25,7 +26,17 @@ SECRET_KEY = config('SECRET_KEY')
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = [
+    'localhost',
+    '127.0.0.1',
+]
+
+render_hostname = os.environ.get(
+    'RENDER_EXTERNAL_HOSTNAME'
+)
+
+if render_hostname:
+    ALLOWED_HOSTS.append(render_hostname)
 
 
 # Application definition
@@ -45,6 +56,7 @@ INSTALLED_APPS = [
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -52,6 +64,10 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
+
+STATICFILES_STORAGE = (
+    'whitenoise.storage.CompressedManifestStaticFilesStorage'
+)
 
 ROOT_URLCONF = 'SKSphere.urls'
 
@@ -79,10 +95,10 @@ WSGI_APPLICATION = 'SKSphere.wsgi.application'
 # https://docs.djangoproject.com/en/5.2/ref/settings/#databases
 
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
-    }
+    'default': dj_database_url.config(
+        default=f"sqlite:///{BASE_DIR / 'db.sqlite3'}",
+        conn_max_age=600
+    )
 }
 
 
@@ -122,6 +138,12 @@ USE_TZ = True
 
 STATIC_URL = 'static/'
 
+STATIC_ROOT = BASE_DIR / 'staticfiles'
+
+STATICFILES_STORAGE = (
+    'whitenoise.storage.CompressedManifestStaticFilesStorage'
+)
+
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field
 
@@ -130,9 +152,12 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 MEDIA_URL = '/media/'
 MEDIA_ROOT = BASE_DIR / 'media'
 
+
 STATICFILES_DIRS = [
-    BASE_DIR / 'static'
+    BASE_DIR / 'static',
 ]
+
+STATIC_ROOT = BASE_DIR / 'staticfiles'
 
 UPI_ID = "9912061912@ptsbi"
 
