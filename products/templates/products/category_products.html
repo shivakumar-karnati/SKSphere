@@ -17,7 +17,7 @@ href="{% static 'css/products/category_products.css' %}">
             <h1>
                 🛍 Explore Products
             </h1>
-
+            
             <p>
                 Discover premium products from SKSphere
             </p>
@@ -29,7 +29,7 @@ href="{% static 'css/products/category_products.css' %}">
         <div class="category-chips">
 
             <a href="{% url 'products' %}"
-               class="chip">
+               class="chip {% if not current_category %}active{% endif %}">
 
                 ✨ All Products
 
@@ -38,7 +38,7 @@ href="{% static 'css/products/category_products.css' %}">
             {% for category in categories %}
 
             <a href="{% url 'category_products' category.id %}"
-               class="chip">
+               class="chip {% if current_category.id == category.id %}active{% endif %}">
 
                 {{ category.name }}
 
@@ -74,14 +74,14 @@ href="{% static 'css/products/category_products.css' %}">
 
                         </h5>
 
-                        <h4>
+                        <h4 class="price-tag">
 
                             ₹{{ product.price }}
 
                         </h4>
 
                         <a href="{% url 'product_detail' product.id %}"
-                           class="view-btn">
+                           class="view-btn shop-btn">
 
                             View Product
 

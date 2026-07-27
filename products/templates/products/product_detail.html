@@ -12,8 +12,11 @@ href="{% static 'css/products/productdetail.css' %}">
 
         <div class="col-md-6">
 
-            <img src="{{ product.image.url }}"
-                 class="img-fluid product-image">
+            <div class="product-image-wrapper">
+                <img src="{{ product.image.url }}"
+                     class="img-fluid product-image"
+                     alt="{{ product.name }}">
+            </div>
 
         </div>
 
@@ -23,15 +26,16 @@ href="{% static 'css/products/productdetail.css' %}">
                 {{ product.name }}
             </h1>
 
-            <h3 class="text-primary">
+            <h3 class="price-tag">
                 ₹{{ product.price }}
             </h3>
+            <br>
             <h5 class="text-warning">
 
                 ⭐ {{ average_rating|default:"0"|floatformat:1 }}/5
 
             </h5>
-            
+
 
             <p>
                 {{ product.description }}
@@ -59,38 +63,45 @@ href="{% static 'css/products/productdetail.css' %}">
                 </div>
 
             {% endif %}
-            {% if product.stock > 0 %}
-                <a href="{% url 'add_to_cart' product.id %}"
-                class="btn btn-success btn-lg mt-3">
 
-                    <i class="bi bi-cart-plus-fill"></i>
-                    Add To Cart
+            <div class="action-buttons">
+
+                {% if product.stock > 0 %}
+                    <a href="{% url 'add_to_cart' product.id %}"
+                    class="btn btn-success btn-lg shop-btn">
+
+                        <i class="bi bi-cart-plus-fill"></i>
+                        Add To Cart
+
+                    </a>
+                    <a href="{% url 'buy_now' product.id %}"
+                    class="btn btn-warning btn-lg shop-btn">
+
+                        <i class="bi bi-lightning-charge-fill"></i>
+
+                        Buy Now
+
+                    </a>
+                {% else %}
+                    <button
+                    class="btn btn-danger btn-lg"
+                    disabled>
+
+                        Out Of Stock
+
+                    </button>
+
+                {% endif %}
+
+                <a href="{% url 'add_to_wishlist' product.id %}"
+                class="btn btn-wishlist btn-lg shop-btn">
+
+                    ❤️ Add To Wishlist
 
                 </a>
-                <a href="{% url 'buy_now' product.id %}"
-                class="btn btn-warning btn-lg mt-3 w-100">
 
-                    <i class="bi bi-lightning-charge-fill"></i>
+            </div>
 
-                    Buy Now
-
-                </a>
-            {% else %}
-                        <button
-                        class="btn btn-danger"
-                        disabled>
-
-                            Out Of Stock
-
-                        </button>
-
-            {% endif %}
-            <a href="{% url 'add_to_wishlist' product.id %}"
-            class="btn btn-danger btn-lg mt-3">
-
-                ❤️ Add To Wishlist
-
-            </a>
             <div class="mt-5">
 
                 <h3>
@@ -165,7 +176,7 @@ href="{% static 'css/products/productdetail.css' %}">
                                     required></textarea>
 
                                 <button
-                                    class="btn btn-primary mt-3">
+                                    class="btn btn-primary shop-btn mt-3">
 
                                     Submit Review
 
@@ -267,7 +278,7 @@ href="{% static 'css/products/productdetail.css' %}">
                     {% endfor %}
                 </div>
 
-                
+
 
             </div>
 
@@ -292,8 +303,11 @@ href="{% static 'css/products/productdetail.css' %}">
 
             <div class="card related-card">
 
-                <img src="{{ item.image.url }}"
-                     class="card-img-top related-img">
+                <div class="related-img-container">
+                    <img src="{{ item.image.url }}"
+                         class="card-img-top related-img"
+                         alt="{{ item.name }}">
+                </div>
 
                 <div class="card-body text-center">
 
@@ -303,14 +317,12 @@ href="{% static 'css/products/productdetail.css' %}">
 
                     </h5>
 
-                    <h6 class="text-primary">
-
+                    <h6 class="price-tag-sm">
                         ₹{{ item.price }}
-
                     </h6>
 
                     <a href="{% url 'product_detail' item.id %}"
-                       class="btn btn-primary">
+                       class="btn btn-primary shop-btn">
 
                         View Product
 
@@ -339,5 +351,6 @@ href="{% static 'css/products/productdetail.css' %}">
     </div>
 
 </section>
+
 
 {% endblock %}

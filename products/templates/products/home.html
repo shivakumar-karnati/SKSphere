@@ -48,50 +48,46 @@
     </div>
 
 </section>
-<div class="container mt-5 text-center" id="category">
+<div class="container mt-2 text-center" id="category">
 
     <h2 class="text-center mb-4">
         Shop By Category
     </h2>
 
-    <div class="row justify-content-center g-4">
+    <div class="category-grid">
 
         {% for category in categories %}
 
-        <div class="col-lg-3 col-md-4 col-sm-6">
+        <a href="{% url 'category_products' category.id %}"
+           class="text-decoration-none text-dark">
 
-            <a href="{% url 'category_products' category.id %}"
-               class="text-decoration-none text-dark">
+            <div class="card category-card">
 
-                <div class="card category-card">
+                <div class="card-body text-center">
 
-                    <div class="card-body text-center">
+                    <h1>
+                        {% if category.name == "Electronics" %}
+                            📱
+                        {% elif category.name == "Fashion" %}
+                            👕
+                        {% elif category.name == "Books" %}
+                            📚
+                        {% elif category.name == "Accessories" %}
+                            ⌚
+                        {% elif category.name == "Sports" %}
+                            ⚽
+                        {% else %}
+                            🛒
+                        {% endif %}
+                    </h1>
 
-                        <h1>
-                            {% if category.name == "Electronics" %}
-                                📱
-                            {% elif category.name == "Fashion" %}
-                                👕
-                            {% elif category.name == "Books" %}
-                                📚
-                            {% elif category.name == "Accessories" %}
-                                ⌚
-                            {% elif category.name == "Sports" %}
-                                ⚽
-                            {% else %}
-                                🛒
-                            {% endif %}
-                        </h1>
-
-                        <h5>{{ category.name }}</h5>
-
-                    </div>
+                    <h5>{{ category.name }}</h5>
 
                 </div>
 
-            </a>
+            </div>
 
-        </div>
+        </a>
 
         {% endfor %}
 
@@ -105,124 +101,29 @@
 
 <section class="featured-section">
 
-
 <div class="section-header">
-
     <h2>🔥 Recommended For You</h2>
-
 </div>
 
-<div class="products-slider">
+<div class="slider-wrapper">
 
-    {% for product in recommended_products %}
-
-    <div class="product-card">
-
-        <img src="{{ product.image.url }}"
-             alt="{{ product.name }}">
-        <hr>
-        <div class="product-content">
-
-            <h5>{{ product.name }}</h5>
-
-            <p>₹{{ product.price }}</p>
-
-            <a href="{% url 'product_detail' product.id %}"
-               class="shop-btn">
-
-                View Product
-
-            </a>
-
-        </div>
-
-    </div>
-
-    {% endfor %}
-
-</div>
-
-</section>
-<hr>
-
-<!-- =========================
-     RECENTLY VIEWED
-========================= -->
-
-{% if recent_products %}
-
-<section class="featured-section">
-
-
-<div class="section-header">
-
-    <h2>👀 Recently Viewed</h2>
-
-</div>
-
-<div class="products-slider">
-
-    {% for product in recent_products %}
-
-    <div class="product-card">
-
-        <img src="{{ product.image.url }}"
-             alt="{{ product.name }}">
-        <hr>
-        <div class="product-content">
-
-            <h5>{{ product.name }}</h5>
-
-            <p>₹{{ product.price }}</p>
-
-            <a href="{% url 'product_detail' product.id %}"
-               class="shop-btn">
-
-                View Again
-
-            </a>
-
-        </div>
-
-    </div>
-
-    {% endfor %}
-
-</div>
-
-<hr>
-
-</section>
-
-{% endif %}
-
-<section class="featured-section">
-
-    <div class="section-header">
-
-        <h2>
-            🏆 Top Sellers
-        </h2>
-
-    </div>
+    <button class="slider-btn prev" aria-label="Scroll left"><i class="bi bi-chevron-left"></i></button>
 
     <div class="products-slider">
 
-        {% for product in best_sellers %}
+        {% for product in recommended_products %}
 
         <div class="product-card">
 
-            <img src="{{ product.image.url }}">
-            <hr>
+            <div class="product-img-box">
+                <img src="{{ product.image.url }}" alt="{{ product.name }}">
+            </div>
+
             <div class="product-content">
 
-                <h5>
-                    {{ product.name }}
-                </h5>
+                <h5>{{ product.name }}</h5>
 
-                <p>
-                    ₹{{ product.price }}
-                </p>
+                <p>₹{{ product.price }}</p>
 
                 <a href="{% url 'product_detail' product.id %}"
                    class="shop-btn">
@@ -239,6 +140,115 @@
 
     </div>
 
+    <button class="slider-btn next" aria-label="Scroll right"><i class="bi bi-chevron-right"></i></button>
+
+</div>
+
+</section>
+<hr>
+
+<!-- =========================
+     RECENTLY VIEWED
+========================= -->
+
+{% if recent_products %}
+
+<section class="featured-section">
+
+<div class="section-header">
+    <h2>👀 Recently Viewed</h2>
+</div>
+
+<div class="slider-wrapper">
+
+    <button class="slider-btn prev" aria-label="Scroll left"><i class="bi bi-chevron-left"></i></button>
+
+    <div class="products-slider">
+
+        {% for product in recent_products %}
+
+        <div class="product-card">
+
+            <div class="product-img-box">
+                <img src="{{ product.image.url }}" alt="{{ product.name }}">
+            </div>
+
+            <div class="product-content">
+
+                <h5>{{ product.name }}</h5>
+
+                <p>₹{{ product.price }}</p>
+
+                <a href="{% url 'product_detail' product.id %}"
+                   class="shop-btn">
+
+                    View Again
+
+                </a>
+
+            </div>
+
+        </div>
+
+        {% endfor %}
+
+    </div>
+
+    <button class="slider-btn next" aria-label="Scroll right"><i class="bi bi-chevron-right"></i></button>
+
+</div>
+
+</section>
+
+<hr>
+
+{% endif %}
+
+<section class="featured-section">
+
+    <div class="section-header">
+        <h2>🏆 Top Sellers</h2>
+    </div>
+
+    <div class="slider-wrapper">
+
+        <button class="slider-btn prev" aria-label="Scroll left"><i class="bi bi-chevron-left"></i></button>
+
+        <div class="products-slider">
+
+            {% for product in best_sellers %}
+
+            <div class="product-card">
+
+                <div class="product-img-box">
+                    <img src="{{ product.image.url }}" alt="{{ product.name }}">
+                </div>
+
+                <div class="product-content">
+
+                    <h5>{{ product.name }}</h5>
+
+                    <p>₹{{ product.price }}</p>
+
+                    <a href="{% url 'product_detail' product.id %}"
+                       class="shop-btn">
+
+                        View Product
+
+                    </a>
+
+                </div>
+
+            </div>
+
+            {% endfor %}
+
+        </div>
+
+        <button class="slider-btn next" aria-label="Scroll right"><i class="bi bi-chevron-right"></i></button>
+
+    </div>
+
 </section>
 
 <hr>
@@ -249,46 +259,52 @@
 
 <section class="featured-section">
 
-
 <div class="section-header">
-
     <h2>🆕 New Arrivals</h2>
-
 </div>
 
-<div class="products-slider">
+<div class="slider-wrapper">
 
-    {% for product in new_arrivals %}
+    <button class="slider-btn prev" aria-label="Scroll left"><i class="bi bi-chevron-left"></i></button>
 
-    <div class="product-card">
+    <div class="products-slider">
 
-        <img src="{{ product.image.url }}"
-             alt="{{ product.name }}">
-        <hr>
-        <div class="product-content">
+        {% for product in new_arrivals %}
 
-            <h5>{{ product.name }}</h5>
+        <div class="product-card">
 
-            <p>₹{{ product.price }}</p>
+            <div class="product-img-box">
+                <img src="{{ product.image.url }}" alt="{{ product.name }}">
+            </div>
 
-            <a href="{% url 'product_detail' product.id %}"
-               class="shop-btn">
+            <div class="product-content">
 
-                Explore
+                <h5>{{ product.name }}</h5>
 
-            </a>
+                <p>₹{{ product.price }}</p>
+
+                <a href="{% url 'product_detail' product.id %}"
+                   class="shop-btn">
+
+                    Explore
+
+                </a>
+
+            </div>
 
         </div>
 
+        {% endfor %}
+
     </div>
 
-    {% endfor %}
+    <button class="slider-btn next" aria-label="Scroll right"><i class="bi bi-chevron-right"></i></button>
 
 </div>
 
-<hr>
-
 </section>
+
+<hr>
 
 <!-- =========================
      FEATURED PRODUCTS
@@ -296,48 +312,49 @@
 
 <section class="featured-section">
 
-
 <div class="section-header">
-
     <h2>⭐ Featured Products</h2>
-
-    <a href="{% url 'products' %}">
-        View All →
-    </a>
-
+    <a href="{% url 'products' %}">View All →</a>
 </div>
 
-<div class="products-slider">
+<div class="slider-wrapper">
 
-    {% for product in featured_products %}
+    <button class="slider-btn prev" aria-label="Scroll left"><i class="bi bi-chevron-left"></i></button>
 
-    <div class="product-card">
+    <div class="products-slider">
 
-        <img src="{{ product.image.url }}"
-             alt="{{ product.name }}">
-        <hr>
-        <div class="product-content">
+        {% for product in featured_products %}
 
-            <h5>{{ product.name }}</h5>
+        <div class="product-card">
 
-            <p>₹{{ product.price }}</p>
+            <div class="product-img-box">
+                <img src="{{ product.image.url }}" alt="{{ product.name }}">
+            </div>
 
-            <a href="{% url 'product_detail' product.id %}"
-               class="shop-btn">
+            <div class="product-content">
 
-                View Product
+                <h5>{{ product.name }}</h5>
 
-            </a>
+                <p>₹{{ product.price }}</p>
+
+                <a href="{% url 'product_detail' product.id %}"
+                   class="shop-btn">
+
+                    View Product
+
+                </a>
+
+            </div>
 
         </div>
 
+        {% endfor %}
+
     </div>
 
-    {% endfor %}
+    <button class="slider-btn next" aria-label="Scroll right"><i class="bi bi-chevron-right"></i></button>
 
 </div>
-
-<hr>
 
 </section>
 
@@ -347,7 +364,6 @@
 ========================= -->
 
 <section class="why-section">
-
 
 <h2>Why Choose SKSphere?</h2>
 
@@ -378,7 +394,6 @@
     </div>
 
 </div>
-
 
 </section>
 

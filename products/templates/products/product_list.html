@@ -147,11 +147,8 @@ href="{% static 'css/products/product_list.css' %}">
 
             <div class="col-md-4">
 
-                <button
-                    class="btn btn-primary w-100">
-
+                <button class="btn btn-primary shop-btn w-100">
                     Apply Filters
-
                 </button>
 
             </div>
@@ -173,7 +170,8 @@ href="{% static 'css/products/product_list.css' %}">
             <div class="product-img-container">
 
                 <img src="{{ product.image.url }}"
-                     class="card-img-top product-img">
+                     class="card-img-top product-img"
+                     alt="{{ product.name }}">
 
             </div>
 
@@ -192,11 +190,9 @@ href="{% static 'css/products/product_list.css' %}">
                 </h4>
 
                 <a href="{% url 'product_detail' product.id %}"
-                   class="btn btn-primary mt-2">
-
-                    View Product
-
-                </a>
+                    class="btn btn-primary shop-btn mt-2">
+                        View Product
+                    </a>
 
             </div>
 

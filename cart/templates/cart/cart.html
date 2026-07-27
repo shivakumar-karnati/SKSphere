@@ -7,83 +7,90 @@
 
 {% block content %}
 
-<div class="container mt-5">
+<div class="container mt-5 cart-page-wrap">
 
-    <h1 class="text-center mb-5">
+    <h1 class="cart-page-title">
          My Cart 🛒
     </h1>
 
-    <div class="row">
+    {% if cart_items %}
 
-        {% for item in cart_items %}
+    <div class="cart-stepper">
 
-        <div class="col-md-12 mb-4">
+        <div class="step active">
+            <span class="step-circle"><i class="bi bi-cart-check-fill"></i></span>
+            <span class="step-label">Cart</span>
+        </div>
 
-            <div class="card shadow">
+        <span class="step-line"></span>
 
-                <div class="row g-2">
+        <div class="step">
+            <span class="step-circle">2</span>
+            <span class="step-label">Shipping</span>
+        </div>
 
-                    <div class="col-md-3">
+        <span class="step-line"></span>
 
-                        <a href="{% url 'product_detail' item.product.id %}">
-                            <img src="{{ item.product.image.url }}" class="img-fluid rounded-start"
-                             height="200">
-                        </a>
+        <div class="step">
+            <span class="step-circle">3</span>
+            <span class="step-label">Payment</span>
+        </div>
 
-                    </div>
+    </div>
 
-                    <div class="col-md-9">
+    <div class="cart-layout">
 
-                        <div class="card-body">
+        <!-- Cart Items -->
+        <div class="cart-items-col">
 
-                            <h3>
-                                {{ item.product.name }}
-                            </h3>
+            {% for item in cart_items %}
 
-                            <h5 class="text-primary">
+            <div class="cart-item-card">
 
-                                ₹{{ item.product.price }}
+                <div class="cart-item-inner">
 
-                            </h5>
+                    <a href="{% url 'product_detail' item.product.id %}"
+                       class="cart-item-img">
+                        <span class="qty-badge">×{{ item.quantity }}</span>
+                        <img src="{{ item.product.image.url }}"
+                             alt="{{ item.product.name }}">
+                    </a>
 
-                            <p class="fw-bold text-success">
+                    <a href="{% url 'remove_from_cart' item.id %}"
+                       class="remove-x"
+                       title="Remove item"
+                       onclick="return confirm('Remove this item from your cart?')">
+                        <i class="bi bi-x-lg"></i>
+                    </a>
 
-                                ₹{{ item.product.price }}
+                    <div class="cart-item-details">
 
-                                ×
+                        <h3>
+                            {{ item.product.name }}
+                        </h3>
 
+                        <div class="unit-price">
+                            ₹{{ item.product.price }}
+                        </div>
+
+                        <p class="line-total">
+                            ₹{{ item.product.price }} × {{ item.quantity }}
+                        </p>
+
+                        <div class="qty-stepper">
+
+                            <a href="{% url 'decrease_quantity' item.id %}"
+                               class="qty-btn decrease">
+                                <i class="bi bi-dash-lg"></i>
+                            </a>
+
+                            <span class="qty-value">
                                 {{ item.quantity }}
+                            </span>
 
-                            </p>
-
-                            <div class="d-flex align-items-center gap-2">
-
-                                <a href="{% url 'decrease_quantity' item.id %}"
-                                class="btn btn-danger">
-
-                                    <i class="bi bi-dash-lg"></i>
-
-                                </a>
-
-                                <span class="fw-bold fs-5">
-                                    {{ item.quantity }}
-                                </span>
-
-                                <a href="{% url 'increase_quantity' item.id %}"
-                                class="btn btn-success">
-
-                                    <i class="bi bi-plus-lg"></i>
-
-                                </a>
-
-                            </div>
-                            <a href="{% url 'remove_from_cart' item.id %}"
-                            class="btn btn-danger mt-3">
-
-                                <i class="bi bi-trash-fill"></i>
-
-                                Remove
-
+                            <a href="{% url 'increase_quantity' item.id %}"
+                               class="qty-btn increase">
+                                <i class="bi bi-plus-lg"></i>
                             </a>
 
                         </div>
@@ -94,55 +101,86 @@
 
             </div>
 
+            {% endfor %}
+
         </div>
 
-        {% empty %}
+        <!-- Order Summary -->
+        <div class="cart-summary-col">
 
-        <h3 class="text-center">
-            Your Cart Is Empty 🛒
-        </h3>
+            <div class="cart-summary">
 
-        {% endfor %}
+                <h3><i class="bi bi-receipt"></i> Cart Summary</h3>
+
+                <hr>
+
+                <h5>
+                    <span>Total Items</span>
+                    <span>{{ cart_items.count }}</span>
+                </h5>
+
+                <h5>
+                    <span>Subtotal</span>
+                    <span>₹{{ total }}</span>
+                </h5>
+
+                <hr>
+
+                <h4>
+                    <span>Total</span>
+                    <span>₹{{ total }}</span>
+                </h4>
+
+                <a href="{% url 'checkout' %}"
+                   class="btn checkout-btn btn-lg w-100 mt-3">
+                    <i class="bi bi-shield-lock-fill"></i>
+                    Proceed To Checkout
+                </a>
+
+                <div class="trust-badges">
+
+                    <div class="badge-item">
+                        <i class="bi bi-truck"></i>
+                        Fast Delivery
+                    </div>
+
+                    <div class="badge-item">
+                        <i class="bi bi-shield-check"></i>
+                        Secure Payment
+                    </div>
+
+                    <div class="badge-item">
+                        <i class="bi bi-arrow-repeat"></i>
+                        Easy Returns
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
 
     </div>
-    
 
-</div>
-<div class="card shadow p-4 mt-5">
+    {% else %}
 
-    <h3>Cart Summary</h3>
+    <div class="empty-cart">
 
-    <hr>
+        <div class="empty-icon-wrap">
+            <div class="empty-icon">🛒</div>
+        </div>
 
-    <h5>
+        <h3>Your Cart Is Empty</h3>
 
-        Total Items :
-        {{ cart_items.count }}
+        <p>Looks like you haven't added anything yet. Let's fix that!</p>
 
-    </h5>
+        <a href="{% url 'products' %}" class="continue-shopping-btn">
+            Continue Shopping
+        </a>
 
-    <h5>
+    </div>
 
-        Subtotal :
-        ₹{{ total }}
-
-    </h5>
-
-    <hr>
-
-    <h4 class="text-success">
-
-        Total :
-        ₹{{ total }}
-
-    </h4>
-
-    <a href="{% url 'checkout' %}"
-       class="btn btn-success btn-lg w-100 mt-3">
-
-        Proceed To Checkout
-
-    </a>
+    {% endif %}
 
 </div>
 

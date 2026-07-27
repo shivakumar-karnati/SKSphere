@@ -2,6 +2,8 @@
 <!DOCTYPE html>
 <html>
 <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>SKSphere</title>
 
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
@@ -21,7 +23,7 @@
 </head>
 <body>
 
-<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+<nav class="navbar navbar-expand-lg navbar-dark fixed-top">
     <div class="container">
 
         <!-- Logo -->
@@ -51,7 +53,7 @@
              id="navbarContent">
 
             <!-- Categories Dropdown -->
-            <ul class="navbar-nav ms-3">
+            <ul class="navbar-nav ms-lg-3">
 
                 <li class="nav-item dropdown">
 
@@ -84,7 +86,7 @@
             </ul>
 
             <!-- Search Bar -->
-            <form class="d-flex flex-grow-1 mx-4"
+            <form class="d-flex flex-grow-1 mx-lg-4 my-3 my-lg-0"
                 method="GET"
                 action="{% url 'products' %}">
 
@@ -232,6 +234,10 @@
 
     </div>
 </nav>
+
+<!-- Spacer so fixed navbar doesn't overlap content -->
+<div style="height: 78px;"></div>
+
 {% if messages %}
 
 <div class="container mt-3">
@@ -253,11 +259,15 @@
 {% block content %}
 {% endblock %}
 
-<footer class="bg-dark text-white text-center p-3 mt-5">
-© 2026 SKSphere
+<footer class="text-white text-center p-4 mt-5">
+    <span>© 2026 SKSphere. Crafted with care.</span>
 </footer>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<script src="{% static 'js/main.js' %}"></script>
+
+{% block js %}
+{% endblock %}
 
 </body>
 </html>

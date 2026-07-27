@@ -171,7 +171,6 @@ def product_detail(request, id):
             'purchased': purchased,
         }
     )
-
 def category_products(request, category_id):
 
     category = Category.objects.get(
@@ -227,10 +226,10 @@ def category_products(request, category_id):
         {
             'products': products,
             'categories': categories,
-            'category': category
+            'category': category,
+            'current_category': category,  
         }
     )
-
 @login_required
 def add_to_wishlist(request, product_id):
 

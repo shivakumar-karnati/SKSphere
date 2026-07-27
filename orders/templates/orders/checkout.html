@@ -10,7 +10,7 @@
 
 <div class="container py-5">
 
-    <div class="checkout-header text-center mb-5">
+    <div class="checkout-header text-center mb-4">
 
         <h1 class="fw-bold">
             🛍 Checkout
@@ -19,6 +19,29 @@
         <p>
             Complete your order securely
         </p>
+
+    </div>
+
+    <div class="checkout-stepper">
+
+        <div class="step done">
+            <span class="step-circle"><i class="bi bi-check-lg"></i></span>
+            <span class="step-label">Cart</span>
+        </div>
+
+        <span class="step-line done"></span>
+
+        <div class="step active">
+            <span class="step-circle">2</span>
+            <span class="step-label">Checkout</span>
+        </div>
+
+        <span class="step-line"></span>
+
+        <div class="step">
+            <span class="step-circle">3</span>
+            <span class="step-label">Payment</span>
+        </div>
 
     </div>
 
@@ -103,50 +126,47 @@
                         </div>
 
                     </div>
+
                     <div class="mt-4">
-                        <label class="form-label">
+
+                        <label class="form-label mb-2">
                             Payment Method
                         </label>
 
-                        <div class="form-check">
+                        <div class="payment-options">
 
-                            <input
-                                class="form-check-input"
-                                type="radio"
-                                name="payment_method"
-                                value="COD"
-                                checked>
+                            <div class="payment-option">
+                                <input
+                                    type="radio"
+                                    id="pay-cod"
+                                    name="payment_method"
+                                    value="COD"
+                                    checked>
+                                <label for="pay-cod">
+                                    💵 Cash On Delivery
+                                </label>
+                            </div>
 
-                            <label class="form-check-label">
-
-                                💵 Cash On Delivery
-
-                            </label>
-
-                        </div>
-
-                        <div class="form-check">
-
-                            <input
-                                class="form-check-input"
-                                type="radio"
-                                name="payment_method"
-                                value="UPI">
-
-                            <label class="form-check-label">
-
-                                📱 UPI Payment
-
-                            </label>
+                            <div class="payment-option">
+                                <input
+                                    type="radio"
+                                    id="pay-upi"
+                                    name="payment_method"
+                                    value="UPI">
+                                <label for="pay-upi">
+                                    📱 UPI Payment
+                                </label>
+                            </div>
 
                         </div>
+
                     </div>
-                    <br>
+
                     <button
                         type="submit"
-                        class="btn payment-btn">
+                        class="btn payment-btn mt-4">
 
-                        💳 Proceed 
+                        💳 Proceed
 
                     </button>
 
@@ -171,19 +191,11 @@
                 <div class="summary-item">
 
                     <span>
-
-                        {{ item.product.name }}
-
-                        ×
-
-                        {{ item.quantity }}
-
+                        {{ item.product.name }} × {{ item.quantity }}
                     </span>
 
                     <strong>
-
                         ₹{{ item.product.price }}
-
                     </strong>
 
                 </div>
@@ -229,9 +241,7 @@
                     Coupon Applied:
 
                     <strong>
-
                         {{ coupon.code }}
-
                     </strong>
 
                     ({{ coupon.discount }}% OFF)
@@ -240,44 +250,21 @@
 
                 {% endif %}
 
-                <hr>
-
                 <div class="price-box">
 
                     <p>
-
-                        Subtotal
-
-                        <span>
-
-                            ₹{{ total }}
-
-                        </span>
-
+                        <span>Subtotal</span>
+                        <span>₹{{ total }}</span>
                     </p>
 
                     <p class="text-success">
-
-                        Discount
-
-                        <span>
-
-                            -₹{{ discount }}
-
-                        </span>
-
+                        <span>Discount</span>
+                        <span>-₹{{ discount }}</span>
                     </p>
 
                     <h4>
-
-                        Final Total
-
-                        <span>
-
-                            ₹{{ final_total }}
-
-                        </span>
-
+                        <span>Final Total</span>
+                        <span>₹{{ final_total }}</span>
                     </h4>
 
                 </div>
@@ -286,27 +273,19 @@
 
             <div class="checkout-card mt-4">
 
-                <h4>
+                <h4 class="section-title" style="margin-bottom:18px;">
                     🔒 Why Shop With Us?
                 </h4>
 
                 <ul class="feature-list">
 
-                    <li>
-                        🚚 Fast Delivery
-                    </li>
+                    <li>🚚 Fast Delivery</li>
 
-                    <li>
-                        🔐 Secure Payments
-                    </li>
+                    <li>🔐 Secure Payments</li>
 
-                    <li>
-                        ⭐ Premium Quality
-                    </li>
+                    <li>⭐ Premium Quality</li>
 
-                    <li>
-                        💯 Trusted Platform
-                    </li>
+                    <li>💯 Trusted Platform</li>
 
                 </ul>
 
