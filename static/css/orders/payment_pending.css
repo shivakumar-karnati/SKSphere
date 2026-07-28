@@ -1,0 +1,256 @@
+/* ==========================================================
+   PAYMENT PENDING PAGE — "Sticker & Receipt" language,
+   amber "in review" theme (distinct from green success)
+   ========================================================== */
+
+:root{
+    --c1:#2563eb;
+    --amber:#f59e0b;
+    --dark:#0f172a;
+}
+
+body{
+    background:#fffaf0;
+}
+
+.pending-wrap{
+    max-width:640px;
+    margin:0 auto;
+}
+
+/* ==========================================================
+   STEPPER — Payment step actively pulsing (not complete yet)
+   ========================================================== */
+.pending-stepper{
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    gap:6px;
+    margin:0 auto 40px;
+    max-width:420px;
+    flex-wrap:wrap;
+}
+
+.pending-stepper .step{
+    display:flex;
+    align-items:center;
+    gap:8px;
+    font-weight:800;
+    font-size:.85rem;
+    color:var(--dark);
+}
+
+.pending-stepper .step-circle{
+    width:34px;
+    height:34px;
+    border-radius:50%;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    background:#059669;
+    border:2.5px solid #059669;
+    color:white;
+    font-size:.85rem;
+}
+
+.pending-stepper .step.pending .step-circle{
+    background:var(--amber);
+    border-color:var(--amber);
+    animation: pulseRing 1.6s ease-in-out infinite;
+}
+
+.pending-stepper .step-line{
+    width:36px;
+    height:3px;
+    border-radius:10px;
+    background:#059669;
+}
+
+@keyframes pulseRing{
+    0%,100%{ box-shadow:0 0 0 0 rgba(245,158,11,.5); }
+    50%{ box-shadow:0 0 0 8px rgba(245,158,11,0); }
+}
+
+@media(max-width:480px){
+    .pending-stepper .step-label{ display:none; }
+}
+
+/* ==========================================================
+   CARD
+   ========================================================== */
+.pending-card{
+    position:relative;
+    background:white;
+    border-radius:26px;
+    border:3px solid var(--dark);
+    box-shadow: 9px 9px 0 rgba(245,158,11,.22);
+    padding:55px 40px;
+    text-align:center;
+    opacity:0;
+    transform:translateY(24px);
+    animation:cardIn .6s ease forwards;
+}
+
+@keyframes cardIn{
+    to{ opacity:1; transform:translateY(0); }
+}
+
+@media(max-width:576px){
+    .pending-card{ padding:36px 22px; border-radius:20px; box-shadow:6px 6px 0 rgba(245,158,11,.22); }
+}
+
+/* ==========================================================
+   ANIMATED HOURGLASS ICON
+   ========================================================== */
+.hourglass-wrap{
+    width:120px;
+    height:120px;
+    margin:0 auto 20px;
+    position:relative;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+}
+
+.hourglass-wrap::before{
+    content:'';
+    position:absolute;
+    inset:-10px;
+    border-radius:50%;
+    background: radial-gradient(circle, rgba(245,158,11,.2), transparent 70%);
+    animation: pulseGlow 2s ease-in-out infinite;
+}
+
+@keyframes pulseGlow{
+    0%,100%{ transform:scale(1); opacity:.7; }
+    50%{ transform:scale(1.15); opacity:1; }
+}
+
+.hourglass-icon{
+    font-size:4.2rem;
+    color:var(--amber);
+    position:relative;
+    z-index:1;
+    animation: flipHourglass 2.4s cubic-bezier(.65,0,.35,1) infinite;
+    display:inline-block;
+    filter: drop-shadow(0 10px 16px rgba(245,158,11,.35));
+}
+
+@keyframes flipHourglass{
+    0%, 40%{ transform:rotate(0deg); }
+    50%, 90%{ transform:rotate(180deg); }
+    100%{ transform:rotate(180deg); }
+}
+
+@media(max-width:576px){
+    .hourglass-wrap{ width:96px; height:96px; }
+    .hourglass-icon{ font-size:3.4rem; }
+}
+
+/* ==========================================================
+   TEXT
+   ========================================================== */
+.pending-card h1{
+    font-weight:900;
+    font-size:1.9rem;
+    color:var(--dark);
+    margin-bottom:12px;
+}
+
+.pending-card p{
+    color:#475569;
+    margin-bottom:10px;
+    line-height:1.6;
+}
+
+.pending-card p strong{
+    color:var(--dark);
+}
+
+@media(max-width:576px){
+    .pending-card h1{ font-size:1.4rem; }
+}
+
+/* ==========================================================
+   LIVE STATUS TEXT + ELAPSED TIMER (driven by JS)
+   ========================================================== */
+.status-box{
+    background:#fffbeb;
+    border:2px dashed #fbbf24;
+    border-radius:16px;
+    padding:16px 20px;
+    margin:26px 0;
+}
+
+.status-message{
+    font-weight:700;
+    color:#92400e;
+    font-size:.95rem;
+    margin-bottom:6px;
+    min-height:22px;
+}
+
+.status-timer{
+    font-size:.8rem;
+    font-weight:600;
+    color:#b45309;
+}
+
+.status-timer span{
+    font-weight:800;
+}
+
+/* Indeterminate progress bar */
+.progress-track{
+    width:100%;
+    height:8px;
+    background:#fef3c7;
+    border-radius:20px;
+    overflow:hidden;
+    margin-top:14px;
+}
+
+.progress-fill{
+    height:100%;
+    width:40%;
+    border-radius:20px;
+    background: linear-gradient(90deg, var(--amber), #fbbf24);
+    animation: progressSlide 1.6s ease-in-out infinite;
+}
+
+@keyframes progressSlide{
+    0%{ transform:translateX(-100%); }
+    100%{ transform:translateX(350%); }
+}
+
+/* ==========================================================
+   ACTION BUTTON
+   ========================================================== */
+.pending-btn{
+    display:inline-flex;
+    align-items:center;
+    gap:8px;
+    padding:14px 32px;
+    border-radius:14px;
+    font-weight:800;
+    text-decoration:none;
+    background:var(--dark);
+    color:white !important;
+    box-shadow: 5px 5px 0 var(--c1);
+    transition:.15s;
+    margin-top:10px;
+}
+
+.pending-btn:hover{
+    transform:translate(2px,2px);
+    box-shadow: 3px 3px 0 var(--c1);
+}
+
+.pending-btn:active{
+    transform:translate(5px,5px);
+    box-shadow:none;
+}
+
+@media(max-width:480px){
+    .pending-btn{ width:100%; justify-content:center; }
+}

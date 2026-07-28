@@ -1,79 +1,414 @@
-.tracking-card{
-    background:#fff;
-    border-radius:20px;
-    padding:30px;
-    box-shadow:0 10px 30px rgba(0,0,0,.1);
+/* ==========================================================
+   ORDER DETAIL PAGE — "Sticker & Receipt" language
+   ========================================================== */
+
+:root{
+    --c1:#2563eb;
+    --amber:#f59e0b;
+    --green:#059669;
+    --red:#ef4444;
+    --dark:#0f172a;
 }
 
+body{
+    background:#f4f7ff;
+}
+
+.tracking-card{
+    max-width:760px;
+    margin:0 auto;
+    background:white;
+    border:3px solid var(--dark);
+    border-radius:24px;
+    box-shadow: 8px 8px 0 rgba(37,99,235,.16);
+    padding:36px;
+    opacity:0;
+    transform:translateY(24px);
+    animation:cardIn .6s ease forwards;
+}
+
+@keyframes cardIn{
+    to{ opacity:1; transform:translateY(0); }
+}
+
+@media(max-width:576px){
+    .tracking-card{ padding:22px; border-radius:18px; box-shadow:6px 6px 0 rgba(37,99,235,.16); }
+}
+
+/* ==========================================================
+   HEADER
+   ========================================================== */
+.detail-header{
+    display:flex;
+    justify-content:space-between;
+    align-items:flex-start;
+    flex-wrap:wrap;
+    gap:12px;
+    margin-bottom:28px;
+}
+
+.detail-header h2{
+    font-weight:900;
+    color:var(--dark);
+    margin-bottom:4px;
+}
+
+.detail-header p{
+    color:#64748b;
+    font-weight:600;
+    font-size:.9rem;
+    margin:0;
+}
+
+.print-btn{
+    display:inline-flex;
+    align-items:center;
+    gap:6px;
+    padding:9px 18px;
+    border-radius:12px;
+    border:2px solid var(--dark);
+    background:white;
+    color:var(--dark);
+    font-weight:700;
+    font-size:.82rem;
+    cursor:pointer;
+    transition:.2s;
+}
+
+.print-btn:hover{
+    background:var(--dark);
+    color:white;
+}
+
+/* ==========================================================
+   TRACKING STEPPER — with animated fill line
+   ========================================================== */
 .tracking-wrapper{
     display:flex;
-    align-items:center;
-    justify-content:center;
-    margin:40px 0;
-    flex-wrap:wrap;
+    align-items:flex-start;
+    justify-content:space-between;
+    position:relative;
+    margin:30px 0 34px;
+    padding:0 6px;
+}
+
+.tracking-wrapper::before{
+    content:'';
+    position:absolute;
+    top:19px;
+    left:6%;
+    right:6%;
+    height:4px;
+    background:#e2e8f0;
+    border-radius:10px;
+    z-index:0;
+}
+
+.tracking-wrapper .line-fill{
+    position:absolute;
+    top:19px;
+    left:6%;
+    height:4px;
+    width:0%;
+    background: linear-gradient(90deg, var(--green), var(--c1));
+    border-radius:10px;
+    z-index:1;
+    transition: width 1.1s cubic-bezier(.65,0,.35,1);
 }
 
 .step{
+    position:relative;
+    z-index:2;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    gap:8px;
+    flex:1;
     text-align:center;
 }
 
-.circle{
-    width:60px;
-    height:60px;
+.step .circle{
+    width:40px;
+    height:40px;
     border-radius:50%;
-    background:#ddd;
-    color:#fff;
+    background:white;
+    border:3px solid #e2e8f0;
     display:flex;
     align-items:center;
     justify-content:center;
-    font-weight:700;
-    margin:auto;
+    font-weight:800;
+    color:#94a3b8;
     transition:.4s;
 }
 
 .step.active .circle{
-    background:linear-gradient(
-        135deg,
-        #00c853,
-        #00e676
-    );
+    background:var(--green);
+    border-color:var(--green);
+    color:white;
+}
 
-    box-shadow:
-    0 0 20px #00e676;
+.step.current .circle{
+    background:var(--c1);
+    border-color:var(--c1);
+    color:white;
+    box-shadow:0 0 0 6px rgba(37,99,235,.16);
+    animation: currentPulse 1.8s ease-in-out infinite;
+}
+
+@keyframes currentPulse{
+    0%,100%{ box-shadow:0 0 0 6px rgba(37,99,235,.16); }
+    50%{ box-shadow:0 0 0 10px rgba(37,99,235,.08); }
 }
 
 .step span{
-    display:block;
-    margin-top:10px;
-    font-weight:600;
+    font-size:.75rem;
+    font-weight:700;
+    color:#94a3b8;
 }
 
-.line{
-    width:100px;
-    height:4px;
-    background:#ddd;
-    margin:0 15px;
+.step.active span,
+.step.current span{
+    color:var(--dark);
 }
 
+/* Old markup used just ".active" for all completed+current steps —
+   this rule keeps that working while the JS also adds .current to the
+   last active step for the pulse effect. */
+
+@media(max-width:480px){
+    .step span{ font-size:.62rem; }
+    .step .circle{ width:32px; height:32px; font-size:.85rem; }
+    .tracking-wrapper::before,
+    .tracking-wrapper .line-fill{ top:15px; }
+}
+
+/* Cancelled state banner (shown instead of stepper via JS/template) */
+.cancelled-banner{
+    text-align:center;
+    background:rgba(239,68,68,.08);
+    border:2px solid rgba(239,68,68,.3);
+    color:var(--red);
+    font-weight:800;
+    padding:14px;
+    border-radius:14px;
+    margin:20px 0 34px;
+}
+
+/* ==========================================================
+   SHIPPING DETAILS — info grid with copy-address action
+   ========================================================== */
+.section-heading{
+    font-weight:800;
+    color:var(--dark);
+    font-size:1.15rem;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    margin-bottom:16px;
+}
+
+.shipping-grid{
+    display:grid;
+    grid-template-columns:repeat(2,1fr);
+    gap:14px;
+    background:#f8fafc;
+    border:2px dashed #e2e8f0;
+    border-radius:16px;
+    padding:20px;
+    margin-bottom:10px;
+}
+
+.shipping-grid .field{
+    display:flex;
+    flex-direction:column;
+    gap:3px;
+}
+
+.shipping-grid .field.full{
+    grid-column:1 / -1;
+}
+
+.shipping-grid .field-label{
+    font-size:.68rem;
+    font-weight:700;
+    color:#94a3b8;
+    text-transform:uppercase;
+    letter-spacing:.4px;
+}
+
+.shipping-grid .field-value{
+    font-weight:700;
+    color:var(--dark);
+    font-size:.92rem;
+}
+
+@media(max-width:480px){
+    .shipping-grid{ grid-template-columns:1fr; }
+}
+
+.copy-btn{
+    display:inline-flex;
+    align-items:center;
+    gap:6px;
+    padding:7px 14px;
+    border-radius:10px;
+    border:2px solid #e2e8f0;
+    background:white;
+    color:#475569;
+    font-weight:700;
+    font-size:.75rem;
+    cursor:pointer;
+    transition:.2s;
+}
+
+.copy-btn:hover{
+    border-color:var(--c1);
+    color:var(--c1);
+}
+
+.copy-btn.copied{
+    border-color:var(--green);
+    color:var(--green);
+    background:rgba(5,150,105,.08);
+}
+
+/* Payment method chip */
+.payment-chip{
+    display:inline-flex;
+    align-items:center;
+    gap:8px;
+    background:rgba(37,99,235,.08);
+    color:var(--c1);
+    font-weight:800;
+    padding:10px 18px;
+    border-radius:12px;
+    margin:8px 0 4px;
+}
+
+hr{
+    border:none;
+    border-top:2px dashed #e2e8f0;
+    margin:26px 0;
+}
+
+/* ==========================================================
+   PRODUCTS
+   ========================================================== */
 .product-box{
     display:flex;
-    gap:20px;
     align-items:center;
-    margin-bottom:20px;
-    padding:15px;
-    border-radius:15px;
-    background:#f8f9fa;
+    gap:18px;
+    padding:16px;
+    background:#f8fafc;
+    border-radius:16px;
+    margin-bottom:14px;
+}
+
+.product-box .product-image-box{
+    position:relative;
+    flex:0 0 84px;
+    width:84px;
+    aspect-ratio:1/1;
+    border-radius:12px;
+    overflow:hidden;
+    background:#e2e8f0;
 }
 
 .product-image{
-    width:90px;
-    height:90px;
+    position:absolute;
+    inset:0;
+    width:100%;
+    height:100%;
     object-fit:cover;
-    border-radius:10px;
+}
+
+.product-box h5{
+    font-weight:700;
+    color:var(--dark);
+    margin-bottom:4px;
+    font-size:.98rem;
+}
+
+.product-box p{
+    margin:0;
+    font-size:.85rem;
+    color:#64748b;
+    font-weight:600;
+}
+
+@media(max-width:480px){
+    .product-box{ gap:12px; padding:12px; }
+    .product-box .product-image-box{ flex:0 0 60px; width:60px; }
+    .product-box h5{ font-size:.85rem; }
+    .product-box p{ font-size:.75rem; }
+}
+
+/* ==========================================================
+   INVOICE + TOTAL
+   ========================================================== */
+.invoice-btn{
+    display:inline-flex;
+    align-items:center;
+    gap:8px;
+    padding:12px 26px;
+    border-radius:14px;
+    background:var(--green);
+    color:white !important;
+    font-weight:800;
+    text-decoration:none;
+    box-shadow: 4px 4px 0 rgba(5,150,105,.3);
+    transition:.15s;
+    margin-top:6px;
+}
+
+.invoice-btn:hover{
+    color:white !important;
+    transform:translate(2px,2px);
+    box-shadow: 2px 2px 0 rgba(5,150,105,.3);
 }
 
 .total-price{
-    color:#198754;
-    margin-top:30px;
-    font-weight:700;
+    position:relative;
+    text-align:right;
+    font-weight:900;
+    color:var(--dark);
+    font-size:1.6rem;
+    background:#f8fafc;
+    border:2px solid var(--dark);
+    border-radius:16px 16px 0 0;
+    border-bottom:none;
+    padding:18px 22px;
+    margin-top:24px;
+}
+
+.total-price::after{
+    content:'';
+    position:absolute;
+    left:-2px;
+    right:-2px;
+    bottom:-14px;
+    height:16px;
+    background:
+        linear-gradient(-45deg, #f4f7ff 8px, transparent 0) 0 0,
+        linear-gradient(45deg, #f4f7ff 8px, transparent 0) 0 0;
+    background-size:16px 16px;
+    background-repeat:repeat-x;
+}
+
+@media(max-width:576px){
+    .total-price{ font-size:1.3rem; text-align:center; }
+}
+
+/* ==========================================================
+   PRINT STYLES
+   ========================================================== */
+@media print{
+    .navbar, footer, .print-btn, .copy-btn, .cursor-glow{
+        display:none !important;
+    }
+    .tracking-card{
+        box-shadow:none;
+        border:1px solid #ccc;
+    }
+    body{ background:white; }
 }

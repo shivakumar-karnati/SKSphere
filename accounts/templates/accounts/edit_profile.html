@@ -33,6 +33,10 @@ href="{% static 'css/accounts/edit_profile.css' %}">
 
                 {% endif %}
 
+                <div class="avatar-upload-badge">
+                    <i class="bi bi-camera-fill"></i>
+                </div>
+
             </div>
 
             <h2>Edit Profile</h2>
@@ -47,6 +51,11 @@ href="{% static 'css/accounts/edit_profile.css' %}">
               enctype="multipart/form-data">
 
             {% csrf_token %}
+
+            <div class="form-section-title">
+                <i class="bi bi-person-fill"></i>
+                Basic Information
+            </div>
 
             <div class="row">
 
@@ -76,61 +85,65 @@ href="{% static 'css/accounts/edit_profile.css' %}">
 
             </div>
 
-            <div class="mt-3">
-
-                <label>Phone Number</label>
-
-                <input type="text"
-                       name="phone"
-                       class="form-control"
-                       value="{{ profile.phone }}">
-
+            <div class="form-section-title">
+                <i class="bi bi-geo-alt-fill"></i>
+                Contact &amp; Address
             </div>
 
-            <div class="mt-3">
+            <label>Phone Number</label>
 
-                <label>City</label>
+            <input type="text"
+                   name="phone"
+                   class="form-control"
+                   value="{{ profile.phone }}">
 
-                <input type="text"
-                       name="city"
-                       class="form-control"
-                       value="{{ profile.city }}">
+            <label>City</label>
 
+            <input type="text"
+                   name="city"
+                   class="form-control"
+                   value="{{ profile.city }}">
+
+            <label>Address</label>
+
+            <textarea
+                name="address"
+                rows="3"
+                class="form-control">{{ profile.address }}</textarea>
+
+            <div class="form-section-title">
+                <i class="bi bi-chat-square-text-fill"></i>
+                About You
             </div>
 
-            <div class="mt-3">
+            <label>Bio</label>
 
-                <label>Address</label>
+            <div class="bio-wrapper">
 
                 <textarea
-                    name="address"
-                    rows="3"
-                    class="form-control">{{ profile.address }}</textarea>
-
-            </div>
-
-            <div class="mt-3">
-
-                <label>Bio</label>
-
-                <textarea
+                    id="bio-field"
                     name="bio"
                     rows="4"
+                    maxlength="250"
                     class="form-control">{{ profile.bio }}</textarea>
 
             </div>
 
-            <div class="mb-4">
+            <div class="char-counter" id="bio-char-counter">0 / 250</div>
 
-                <label>Profile Picture</label>
-
-                <input type="file"
-                       name="profile_pic"
-                       class="form-control">
-
+            <div class="form-section-title">
+                <i class="bi bi-image-fill"></i>
+                Profile Picture
             </div>
 
+            <input type="file"
+                   id="profile-pic-input"
+                   name="profile_pic"
+                   accept="image/*"
+                   class="form-control">
+
             <button
+                type="submit"
                 class="save-btn mt-4">
 
                 🚀 Save Changes

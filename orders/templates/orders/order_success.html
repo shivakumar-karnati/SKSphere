@@ -1,51 +1,95 @@
 {% extends 'base.html' %}
+{% load static %}
+
+{% block css %}
+<link rel="stylesheet"
+      href="{% static 'css/orders/order_success.css' %}">
+{% endblock %}
 
 {% block content %}
 
-<div class="container py-5 text-center">
+<div class="container py-5">
 
+    <div class="order-success-wrap">
 
-<div class="card shadow-lg p-5 rounded-5">
+        <div class="success-stepper">
 
-    <h1 class="text-success mb-4">
+            <div class="step">
+                <span class="step-circle"><i class="bi bi-check-lg"></i></span>
+                <span class="step-label">Cart</span>
+            </div>
 
-        ✅ Order Placed Successfully
+            <span class="step-line"></span>
 
-    </h1>
+            <div class="step">
+                <span class="step-circle"><i class="bi bi-check-lg"></i></span>
+                <span class="step-label">Checkout</span>
+            </div>
 
-    <h4>
+            <span class="step-line"></span>
 
-        Thank you for shopping with SKSphere
+            <div class="step">
+                <span class="step-circle"><i class="bi bi-check-lg"></i></span>
+                <span class="step-label">Confirmed</span>
+            </div>
 
-    </h4>
+        </div>
 
-    <p class="text-muted">
+        <div class="success-card">
 
-        Your order has been received and is being processed.
+            <div class="check-wrap">
+                <svg class="success-check" viewBox="0 0 130 130">
+                    <circle class="check-circle" cx="65" cy="65" r="60" fill="none"/>
+                    <path class="check-mark" d="M38 68 L57 87 L94 44" fill="none"/>
+                </svg>
+            </div>
 
-    </p>
+            <h1>Order Placed Successfully</h1>
 
-    <div class="mt-4">
+            <h4>Thank you for shopping with SKSphere</h4>
 
-        <a href="{% url 'my_orders' %}"
-           class="btn btn-primary btn-lg">
+            <p class="subtext">
+                Your order has been received and is being processed.
+            </p>
 
-            View My Orders
+            {% if order %}
+            <div class="order-meta">
 
-        </a>
+                <div class="meta-chip">
+                    <span>Order ID</span>
+                    #{{ order.id }}
+                </div>
 
-        <a href="{% url 'products' %}"
-           class="btn btn-outline-primary btn-lg ms-2">
+                <div class="meta-chip">
+                    <span>Estimated Delivery</span>
+                    3-5 Business Days
+                </div>
 
-            Continue Shopping
+            </div>
+            {% endif %}
 
-        </a>
+            <div class="success-actions">
+
+                <a href="{% url 'my_orders' %}"
+                   class="success-btn primary">
+                    <i class="bi bi-bag-check-fill"></i>
+                    View My Orders
+                </a>
+
+                <a href="{% url 'products' %}"
+                   class="success-btn secondary">
+                    <i class="bi bi-shop"></i>
+                    Continue Shopping
+                </a>
+
+            </div>
+
+        </div>
 
     </div>
 
 </div>
-```
 
-</div>
+<canvas id="confetti-canvas"></canvas>
 
 {% endblock %}

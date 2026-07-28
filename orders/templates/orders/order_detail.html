@@ -12,93 +12,120 @@
 
     <div class="tracking-card">
 
-        <h2>
-            Order #{{ order.id }}
-        </h2>
+        <div class="detail-header">
 
-        <p>
-            Ordered on {{ order.created_at }}
-        </p>
+            <div>
+                <h2>Order #{{ order.id }}</h2>
+                <p>Ordered on {{ order.created_at }}</p>
+            </div>
+
+            <button type="button" id="print-order-btn" class="print-btn">
+                <i class="bi bi-printer-fill"></i>
+                Print
+            </button>
+
+        </div>
+
+        {% if order.status == 'Cancelled' %}
+
+        <div class="cancelled-banner">
+            ❌ This order has been cancelled
+        </div>
+
+        {% else %}
 
         <div class="tracking-wrapper">
 
             <div class="step {% if order.status == 'Payment Verification' or order.status == 'Processing' or order.status == 'Shipped' or order.status == 'Delivered' %}active{% endif %}">
-                <div class="circle">1</div>
+                <div class="circle"><i class="bi bi-receipt"></i></div>
                 <span>Payment Verification</span>
             </div>
 
-            <div class="line"></div>
-
             <div class="step {% if order.status == 'Processing' or order.status == 'Shipped' or order.status == 'Delivered' %}active{% endif %}">
-                <div class="circle">2</div>
+                <div class="circle"><i class="bi bi-gear-fill"></i></div>
                 <span>Processing</span>
             </div>
 
-            <div class="line"></div>
-
             <div class="step {% if order.status == 'Shipped' or order.status == 'Delivered' %}active{% endif %}">
-                <div class="circle">3</div>
+                <div class="circle"><i class="bi bi-truck"></i></div>
                 <span>Shipped</span>
             </div>
 
-            <div class="line"></div>
-
             <div class="step {% if order.status == 'Delivered' %}active{% endif %}">
-                <div class="circle">4</div>
+                <div class="circle"><i class="bi bi-house-check-fill"></i></div>
                 <span>Delivered</span>
             </div>
 
         </div>
 
+        {% endif %}
+
         <hr>
 
-        <h4>
+        <div class="section-heading">
             Shipping Details
-        </h4>
+            <button type="button"
+                    id="copy-address-btn"
+                    class="copy-btn"
+                    data-address="{{ order.full_name }}, {{ order.address }}, {{ order.city }}, Phone: {{ order.phone }}">
+                <i class="bi bi-clipboard"></i>
+                Copy Address
+            </button>
+        </div>
 
-        <p><strong>Name:</strong> {{ order.full_name }}</p>
+        <div class="shipping-grid">
 
-        <p><strong>Phone:</strong> {{ order.phone }}</p>
+            <div class="field">
+                <span class="field-label">Name</span>
+                <span class="field-value">{{ order.full_name }}</span>
+            </div>
 
-        <p><strong>City:</strong> {{ order.city }}</p>
+            <div class="field">
+                <span class="field-label">Phone</span>
+                <span class="field-value">{{ order.phone }}</span>
+            </div>
 
-        <p><strong>Address:</strong> {{ order.address }}</p>
+            <div class="field">
+                <span class="field-label">City</span>
+                <span class="field-value">{{ order.city }}</span>
+            </div>
 
-        <p><strong>Status:</strong> {{ order.status }}</p>
+            <div class="field">
+                <span class="field-label">Status</span>
+                <span class="field-value">{{ order.status }}</span>
+            </div>
+
+            <div class="field full">
+                <span class="field-label">Address</span>
+                <span class="field-value">{{ order.address }}</span>
+            </div>
+
+        </div>
+
+        <div class="payment-chip">
+            <i class="bi bi-credit-card-fill"></i>
+            {{ order.payment_method }}
+        </div>
 
         <hr>
-        <h4>Payment Method : {{order.payment_method}}</h4>
-        <hr>
-        <h4>
-            Products
-        </h4>
+
+        <div class="section-heading">Products</div>
 
         {% for item in order.orderitem_set.all %}
 
         <div class="product-box">
 
-            <img src="{{ item.product.image.url }}"
-                 class="product-image">
+            <div class="product-image-box">
+                <img src="{{ item.product.image.url }}"
+                     class="product-image"
+                     alt="{{ item.product.name }}">
+            </div>
 
             <div>
 
-                <h5>
-                    {{ item.product.name }}
-                </h5>
+                <h5>{{ item.product.name }}</h5>
 
-                <p>
-                    Qty : {{ item.quantity }}
-                </p>
-
-                <p>
-                    ₹{{ item.price }}
-                </p>
-                <a href="{% url 'download_invoice' order.id %}"
-                class="btn btn-success">
-
-                    📄 Download Invoice
-
-                </a>
+                <p>Qty: {{ item.quantity }} &nbsp;·&nbsp; ₹{{ item.price }} each</p>
 
             </div>
 
@@ -106,8 +133,14 @@
 
         {% endfor %}
 
+        <a href="{% url 'download_invoice' order.id %}"
+           class="invoice-btn">
+            <i class="bi bi-file-earmark-arrow-down-fill"></i>
+            Download Invoice
+        </a>
+
         <h3 class="total-price">
-            Total ₹{{ order.total_amount }}
+            Total &nbsp;₹{{ order.total_amount }}
         </h3>
 
     </div>

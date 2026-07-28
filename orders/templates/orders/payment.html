@@ -40,9 +40,12 @@
 
                 <div class="qr-box">
 
+                    <div class="qr-scanline"></div>
+
                     <img
                         src="data:image/png;base64,{{ qr_code }}"
-                        class="qr-image">
+                        class="qr-image"
+                        alt="Payment QR Code">
 
                 </div>
 
@@ -56,6 +59,11 @@
                         ₹{{ total }}
                     </h1>
 
+                </div>
+
+                <div class="payment-timer">
+                    Complete payment within
+                    <span id="payment-timer-value">10:00</span>
                 </div>
 
                 {% if request.session.buy_now_product %}
@@ -78,9 +86,20 @@
 
                 <div class="payment-apps">
 
-                    <span>PhonePe</span>
-                    <span>Google Pay</span>
-                    <span>Paytm</span>
+                    <button type="button" class="app-chip" data-app="phonepe">
+                        <span class="dot"></span>
+                        PhonePe
+                    </button>
+
+                    <button type="button" class="app-chip" data-app="gpay">
+                        <span class="dot"></span>
+                        Google Pay
+                    </button>
+
+                    <button type="button" class="app-chip" data-app="paytm">
+                        <span class="dot"></span>
+                        Paytm
+                    </button>
 
                 </div>
 
@@ -123,6 +142,7 @@
                         <input
                             type="file"
                             name="screenshot"
+                            accept="image/*"
                             required
                             class="form-control">
 

@@ -11,126 +11,144 @@
 <div class="orders-container">
 
     <h1 class="orders-title">
-
         <i class="bi bi-bag-check-fill"></i>
-
         My Orders
-
     </h1>
-    <br>
-    <p>the orders are display in order</p>
-    
 
-    {% for order in orders %}
+    <p class="orders-subtitle">
+        Your orders are shown below, most recent first.
+    </p>
 
+    {% if orders %}
 
-        {% for item in order.orderitem_set.all %}
+    <div class="order-filters">
 
-        <div class="order-card">
+        <button class="filter-chip active" data-filter="all">All</button>
+        <button class="filter-chip" data-filter="pending">⏳ Pending</button>
+        <button class="filter-chip" data-filter="processing">⚙️ Processing</button>
+        <button class="filter-chip" data-filter="shipped">🚚 Shipped</button>
+        <button class="filter-chip" data-filter="delivered">✅ Delivered</button>
+        <button class="filter-chip" data-filter="cancelled">❌ Cancelled</button>
 
-            <div class="product-section">
+    </div>
 
-                <img src="{{ item.product.image.url }}"
-                    class="product-image"
-                    alt="{{ item.product.name }}">
+    <div class="orders-list">
 
-                <div class="product-info">
+        {% for order in orders %}
 
-                    <h3>
-                        {{ item.product.name }}
-                    </h3>
+        <div class="order-card" data-status="{% if order.status == 'payment Verification' %}pending{% elif order.status == 'Processing' %}processing{% elif order.status == 'Shipped' %}shipped{% elif order.status == 'Delivered' %}delivered{% else %}cancelled{% endif %}">
 
-                    <p>
-                        Quantity :
-                        <strong>{{ item.quantity }}</strong>
-                    </p>
+            <div class="order-header">
 
-                    <p>
-                        Price :
-                        ₹{{ item.price }}
-                    </p>
+                <div class="order-id-date">
+                    <span class="order-id">Order #{{ order.id }}</span>
+                    <span class="order-date">{{ order.created_at }}</span>
+                </div>
 
+                {% if order.status == "payment Verification" %}
+                    <span class="status pending">⏳ Payment Verification</span>
+                {% elif order.status == "Processing" %}
+                    <span class="status processing">⚙️ Processing</span>
+                {% elif order.status == "Shipped" %}
+                    <span class="status shipped">🚚 Shipped</span>
+                {% elif order.status == "Delivered" %}
+                    <span class="status delivered">✅ Delivered</span>
+                {% else %}
+                    <span class="status cancelled">❌ Cancelled</span>
+                {% endif %}
+
+            </div>
+
+            {% if order.status != "Cancelled" %}
+
+            <div class="order-progress">
+
+                <div class="p-step {% if order.status == 'payment Verification' %}current{% else %}done{% endif %}">
+                    <span class="p-dot"><i class="bi bi-check-lg"></i></span>
+                    <span class="p-label">Placed</span>
+                </div>
+
+                <div class="p-step
+                    {% if order.status == 'Processing' %}current
+                    {% elif order.status == 'Shipped' or order.status == 'Delivered' %}done
+                    {% endif %}">
+                    <span class="p-dot"><i class="bi bi-gear-fill"></i></span>
+                    <span class="p-label">Processing</span>
+                </div>
+
+                <div class="p-step
+                    {% if order.status == 'Shipped' %}current
+                    {% elif order.status == 'Delivered' %}done
+                    {% endif %}">
+                    <span class="p-dot"><i class="bi bi-truck"></i></span>
+                    <span class="p-label">Shipped</span>
+                </div>
+
+                <div class="p-step {% if order.status == 'Delivered' %}current{% endif %}">
+                    <span class="p-dot"><i class="bi bi-house-check-fill"></i></span>
+                    <span class="p-label">Delivered</span>
                 </div>
 
             </div>
 
-            <div class="order-details">
+            {% endif %}
 
-                <a href="{% url 'order_detail' order.id %}"
-                    class="btn btn-primary mt-3">
+            <div class="order-items">
 
-                        View Details
+                {% for item in order.orderitem_set.all %}
 
-                    </a>
+                <div class="order-item-row">
 
-                <p>
-                    Customer :
-                    {{ order.full_name }}
-                </p>
+                    <div class="order-item-img">
+                        <img src="{{ item.product.image.url }}"
+                             alt="{{ item.product.name }}">
+                    </div>
 
-                <p>
-                    City :
-                    {{ order.city }}
-                </p>
+                    <div class="order-item-info">
+                        <h3>{{ item.product.name }}</h3>
+                        <p>Qty: {{ item.quantity }} &nbsp;·&nbsp; ₹{{ item.price }} each</p>
+                    </div>
 
-                <p>
-                    Ordered :
-                    {{ order.created_at }}
-                </p>
-                <p>
-                    <strong>Payment:</strong>
-                    {{ order.payment_method }}
-                </p>
+                </div>
 
-                <h2 class="amount">
+                {% endfor %}
 
-                    ₹{{ order.total_amount }}
+            </div>
 
-                </h2>
-                
-                {% if order.status == "payment Verification" %}
+            <div class="order-footer">
 
-                    <span class="status pending">
-                        ⏳ Payment Verification
-                    </span>
+                <div class="order-meta-text">
+                    <p><strong>Customer:</strong> {{ order.full_name }}</p>
+                    <p><strong>City:</strong> {{ order.city }}</p>
+                    <p><strong>Payment:</strong> {{ order.payment_method }}</p>
+                </div>
 
-                    {% elif order.status == "Processing" %}
+                <div class="order-amount-actions">
 
-                    <span class="status processing">
-                        ⚙️ Processing
-                    </span>
+                    <h2 class="amount">₹{{ order.total_amount }}</h2>
 
-                    {% elif order.status == "Shipped" %}
+                    <div class="order-actions">
 
-                    <span class="status shipped">
-                        🚚 Shipped
-                    </span>
+                        <a href="{% url 'order_detail' order.id %}"
+                           class="order-btn view">
+                            <i class="bi bi-eye-fill"></i>
+                            View Details
+                        </a>
 
-                    {% elif order.status == "Delivered" %}
+                        {% if order.status == 'payment Verification' or order.status == 'Processing' %}
 
-                    <span class="status delivered">
-                        ✅ Delivered
-                    </span>
+                        <a href="{% url 'cancel_order' order.id %}"
+                           class="order-btn cancel"
+                           onclick="return confirm('Are you sure you want to cancel this order?')">
+                            <i class="bi bi-x-circle-fill"></i>
+                            Cancel
+                        </a>
 
-                    {% else %}
+                        {% endif %}
 
-                    <span class="status cancelled">
-                        ❌ Cancelled
-                    </span>
+                    </div>
 
-                {% endif %}
-                <hr>
-                {% if order.status == 'payment Verification' or order.status == 'Processing' %}
-
-                    <a href="{% url 'cancel_order' order.id %}"
-                    class="btn btn-danger btn-sm mt-2"
-                    onclick="return confirm('Are you sure you want to cancel this order?')">
-
-                        ❌ Cancel Order
-
-                    </a>
-
-                {% endif %}
+                </div>
 
             </div>
 
@@ -138,8 +156,26 @@
 
         {% endfor %}
 
-{% endfor %}
+    </div>
 
+    {% else %}
+
+    <div class="orders-empty">
+
+        <div class="empty-icon">📦</div>
+
+        <h3>No Orders Yet</h3>
+
+        <p>Looks like you haven't placed any orders. Let's change that!</p>
+
+        <a href="{% url 'products' %}" class="order-btn view">
+            <i class="bi bi-shop"></i>
+            Start Shopping
+        </a>
+
+    </div>
+
+    {% endif %}
 
 </div>
 

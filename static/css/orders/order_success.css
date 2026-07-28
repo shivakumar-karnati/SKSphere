@@ -1,0 +1,284 @@
+/* ==========================================================
+   ORDER SUCCESS PAGE — "Sticker & Receipt" language
+   ========================================================== */
+
+:root{
+    --c1:#2563eb;
+    --c3:#f59e0b;
+    --c4:#059669;
+    --dark:#0f172a;
+}
+
+body{
+    background:#f4f7ff;
+}
+
+.order-success-wrap{
+    max-width:640px;
+    margin:0 auto;
+}
+
+/* ==========================================================
+   STEPPER — all steps complete
+   ========================================================== */
+.success-stepper{
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    gap:6px;
+    margin:0 auto 40px;
+    max-width:420px;
+    flex-wrap:wrap;
+}
+
+.success-stepper .step{
+    display:flex;
+    align-items:center;
+    gap:8px;
+    font-weight:800;
+    font-size:.85rem;
+    color:var(--dark);
+}
+
+.success-stepper .step-circle{
+    width:34px;
+    height:34px;
+    border-radius:50%;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    background:var(--c4);
+    border:2.5px solid var(--c4);
+    color:white;
+    font-size:.85rem;
+}
+
+.success-stepper .step-line{
+    width:36px;
+    height:3px;
+    border-radius:10px;
+    background:var(--c4);
+}
+
+@media(max-width:480px){
+    .success-stepper .step-label{ display:none; }
+}
+
+/* ==========================================================
+   SUCCESS CARD
+   ========================================================== */
+.success-card{
+    position:relative;
+    background:white;
+    border-radius:26px;
+    border:3px solid var(--dark);
+    box-shadow: 9px 9px 0 rgba(5,150,105,.20);
+    padding:55px 40px;
+    text-align:center;
+    opacity:0;
+    transform:translateY(24px);
+    animation:cardIn .6s ease forwards;
+    overflow:hidden;
+}
+
+@keyframes cardIn{
+    to{ opacity:1; transform:translateY(0); }
+}
+
+@media(max-width:576px){
+    .success-card{ padding:36px 22px; border-radius:20px; box-shadow:6px 6px 0 rgba(5,150,105,.2); }
+}
+
+/* ==========================================================
+   ANIMATED CHECKMARK (SVG draw-in)
+   ========================================================== */
+.check-wrap{
+    width:130px;
+    height:130px;
+    margin:0 auto 20px;
+    position:relative;
+}
+
+.check-wrap::before{
+    content:'';
+    position:absolute;
+    inset:-14px;
+    border-radius:50%;
+    background: radial-gradient(circle, rgba(5,150,105,.18), transparent 70%);
+    animation: pulseGlow 2.2s ease-in-out infinite;
+}
+
+@keyframes pulseGlow{
+    0%,100%{ transform:scale(1); opacity:.7; }
+    50%{ transform:scale(1.15); opacity:1; }
+}
+
+.success-check{
+    width:100%;
+    height:100%;
+    position:relative;
+    z-index:1;
+}
+
+.check-circle{
+    stroke:var(--c4);
+    stroke-width:5;
+    stroke-linecap:round;
+    stroke-dasharray:377;
+    stroke-dashoffset:377;
+    animation: drawCircle .7s ease forwards;
+}
+
+.check-mark{
+    stroke:var(--c4);
+    stroke-width:7;
+    stroke-linecap:round;
+    stroke-linejoin:round;
+    fill:none;
+    stroke-dasharray:80;
+    stroke-dashoffset:80;
+    animation: drawCheck .4s ease forwards .65s;
+}
+
+@keyframes drawCircle{
+    to{ stroke-dashoffset:0; }
+}
+
+@keyframes drawCheck{
+    to{ stroke-dashoffset:0; }
+}
+
+@media(max-width:576px){
+    .check-wrap{ width:100px; height:100px; }
+}
+
+/* ==========================================================
+   TEXT
+   ========================================================== */
+.success-card h1{
+    font-weight:900;
+    font-size:2rem;
+    color:var(--dark);
+    margin-bottom:10px;
+}
+
+.success-card h4{
+    font-weight:700;
+    color:#334155;
+    margin-bottom:8px;
+}
+
+.success-card p.subtext{
+    color:#64748b;
+    font-size:.95rem;
+    margin-bottom:0;
+}
+
+@media(max-width:576px){
+    .success-card h1{ font-size:1.5rem; }
+    .success-card h4{ font-size:1.05rem; }
+}
+
+/* ==========================================================
+   ORDER META (optional — order id / delivery estimate)
+   ========================================================== */
+.order-meta{
+    display:flex;
+    justify-content:center;
+    gap:14px;
+    flex-wrap:wrap;
+    margin:26px 0;
+}
+
+.order-meta .meta-chip{
+    background:#f8fafc;
+    border:2px solid #e2e8f0;
+    border-radius:14px;
+    padding:12px 20px;
+    font-weight:700;
+    font-size:.85rem;
+    color:#334155;
+}
+
+.order-meta .meta-chip span{
+    display:block;
+    font-size:.7rem;
+    font-weight:600;
+    color:#94a3b8;
+    margin-bottom:2px;
+    text-transform:uppercase;
+    letter-spacing:.4px;
+}
+
+/* ==========================================================
+   ACTION BUTTONS — tactile press style
+   ========================================================== */
+.success-actions{
+    display:flex;
+    justify-content:center;
+    gap:16px;
+    flex-wrap:wrap;
+    margin-top:30px;
+}
+
+.success-btn{
+    display:inline-flex;
+    align-items:center;
+    gap:8px;
+    padding:14px 30px;
+    border-radius:14px;
+    font-weight:800;
+    text-decoration:none;
+    transition:.15s;
+    border:none;
+}
+
+.success-btn.primary{
+    background:var(--dark);
+    color:white !important;
+    box-shadow: 5px 5px 0 var(--c4);
+}
+
+.success-btn.primary:hover{
+    transform:translate(2px,2px);
+    box-shadow: 3px 3px 0 var(--c4);
+}
+
+.success-btn.primary:active{
+    transform:translate(5px,5px);
+    box-shadow:none;
+}
+
+.success-btn.secondary{
+    background:white;
+    color:var(--dark) !important;
+    border:2.5px solid var(--dark);
+    box-shadow: 5px 5px 0 var(--c3);
+}
+
+.success-btn.secondary:hover{
+    transform:translate(2px,2px);
+    box-shadow: 3px 3px 0 var(--c3);
+}
+
+.success-btn.secondary:active{
+    transform:translate(5px,5px);
+    box-shadow:none;
+}
+
+@media(max-width:480px){
+    .success-actions{ flex-direction:column; }
+    .success-btn{ width:100%; justify-content:center; }
+}
+
+/* ==========================================================
+   CONFETTI CANVAS (drawn by order_success.js)
+   ========================================================== */
+#confetti-canvas{
+    position:fixed;
+    inset:0;
+    width:100%;
+    height:100%;
+    pointer-events:none;
+    z-index:9999;
+}

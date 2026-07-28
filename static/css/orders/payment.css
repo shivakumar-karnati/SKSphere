@@ -1,242 +1,423 @@
+/* ==========================================================
+   PAYMENT PAGE — "Sticker & Receipt" language
+   ========================================================== */
+
+:root{
+    --c1:#2563eb;
+    --c3:#f59e0b;
+    --c4:#059669;
+    --dark:#0f172a;
+
+    --phonepe:#5f259f;
+    --gpay:#188038;
+    --paytm:#00b9f5;
+}
+
 .payment-bg{
-    min-height:100vh;
-
     background:#f4f7ff;
-    }
+    background-image:
+        radial-gradient(circle at 12% 15%, rgba(37,99,235,.06), transparent 40%),
+        radial-gradient(circle at 88% 10%, rgba(245,158,11,.05), transparent 40%);
+    padding-bottom:20px;
+}
 
+/* ==========================================================
+   PAYMENT CARD
+   ========================================================== */
 .payment-card,
 .upload-card{
+    background:white;
+    border-radius:22px;
+    border:3px solid var(--dark);
+    padding:32px;
+    box-shadow: 7px 7px 0 rgba(37,99,235,.16);
+    opacity:0;
+    transform:translateY(24px);
+    animation:cardIn .6s ease forwards;
+}
 
+.upload-card{ animation-delay:.15s; }
 
-    background:
-    rgba(144, 142, 142, 0.08);
+@keyframes cardIn{
+    to{ opacity:1; transform:translateY(0); }
+}
 
-    backdrop-filter:
-    blur(20px);
+@media(max-width:576px){
+    .payment-card,
+    .upload-card{ padding:22px; border-radius:18px; }
+}
 
-    border:
-    1px solid rgba(255,255,255,.15);
-
-    border-radius:30px;
-
-    padding:35px;
-
-    /* color:white; */
-
-    box-shadow:
-    0 20px 50px rgba(0,0,0,.25);
-
-    animation:
-    slideUp .8s ease;
-
-
-    }
-
+/* ==========================================================
+   HEADER
+   ========================================================== */
 .payment-header{
     text-align:center;
-    }
+    margin-bottom:24px;
+}
 
 .payment-icon{
-    font-size:60px;
-    margin-bottom:10px;
-    }
+    font-size:3rem;
+    margin-bottom:8px;
+    animation: floatIcon 3s ease-in-out infinite;
+    display:inline-block;
+}
+
+@keyframes floatIcon{
+    0%,100%{ transform:translateY(0); }
+    50%{ transform:translateY(-10px); }
+}
 
 .payment-header h2{
-    font-weight:800;
-    }
+    font-weight:900;
+    color:var(--dark);
+    margin-bottom:6px;
+}
 
+.payment-header p{
+    color:#64748b;
+    font-size:.9rem;
+}
+
+/* ==========================================================
+   QR CODE — animated scanning line + glow frame
+   ========================================================== */
 .qr-box{
-    text-align:center;
-    margin:30px 0;
-    }
+    position:relative;
+    width:220px;
+    height:220px;
+    margin:0 auto 24px;
+    padding:12px;
+    background:white;
+    border:3px solid var(--dark);
+    border-radius:18px;
+    box-shadow: 5px 5px 0 rgba(37,99,235,.18);
+    overflow:hidden;
+    transition:box-shadow .3s ease, transform .3s ease;
+}
+
+.qr-box.pulse{
+    animation: qrPulse .9s ease;
+}
+
+@keyframes qrPulse{
+    0%{ box-shadow: 5px 5px 0 rgba(37,99,235,.18); }
+    40%{ box-shadow: 5px 5px 0 rgba(37,99,235,.18), 0 0 0 8px rgba(37,99,235,.15); transform:scale(1.03); }
+    100%{ box-shadow: 5px 5px 0 rgba(37,99,235,.18); }
+}
 
 .qr-image{
+    width:100%;
+    height:100%;
+    object-fit:contain;
+    position:relative;
+    z-index:1;
+}
 
+.qr-scanline{
+    position:absolute;
+    left:8px;
+    right:8px;
+    height:3px;
+    background: linear-gradient(90deg, transparent, var(--c1), transparent);
+    box-shadow: 0 0 10px 2px rgba(37,99,235,.6);
+    top:12px;
+    z-index:2;
+    animation: scanMove 2.4s ease-in-out infinite;
+}
 
-    width:280px;
+@keyframes scanMove{
+    0%{ top:12px; }
+    50%{ top:calc(100% - 15px); }
+    100%{ top:12px; }
+}
 
-    border-radius:20px;
+@media(max-width:400px){
+    .qr-box{ width:180px; height:180px; }
+}
 
-    background:white;
-
-    padding:15px;
-
-    transition:.4s;
-
-
-    }
-
-.qr-image:hover{
-
-
-    transform:
-    scale(1.05)
-    rotate(2deg);
-
-
-    }
-
+/* ==========================================================
+   AMOUNT BOX
+   ========================================================== */
 .amount-box{
-
-
     text-align:center;
+    background:#f8fafc;
+    border:2px dashed #cbd5e1;
+    border-radius:16px;
+    padding:16px;
+    margin-bottom:18px;
+}
 
-    margin-top:20px;
-
-    }
+.amount-box span{
+    display:block;
+    font-size:.8rem;
+    font-weight:700;
+    color:#94a3b8;
+    text-transform:uppercase;
+    letter-spacing:.5px;
+    margin-bottom:4px;
+}
 
 .amount-box h1{
-
-
-    font-size:3rem;
-
     font-weight:900;
+    font-size:2.4rem;
+    color:var(--c1);
+    margin:0;
+}
 
-    color:#0ff965;
+@media(max-width:576px){
+    .amount-box h1{ font-size:1.9rem; }
+}
 
-
-    }
-
-.order-type{
-
-
+/* ==========================================================
+   COUNTDOWN TIMER — urgency cue
+   ========================================================== */
+.payment-timer{
     text-align:center;
-
-    padding:12px;
-
-    border-radius:15px;
-
-    margin-top:20px;
-
     font-weight:700;
+    font-size:.85rem;
+    color:#475569;
+    margin-bottom:18px;
+}
 
+.payment-timer span{
+    font-weight:900;
+    color:var(--c4);
+    font-variant-numeric:tabular-nums;
+}
 
-    }
+.payment-timer.urgent span{
+    color:#ef4444;
+    animation: urgentBlink 1s ease-in-out infinite;
+}
 
-.buy-now{
+@keyframes urgentBlink{
+    0%,100%{ opacity:1; }
+    50%{ opacity:.4; }
+}
 
+/* ==========================================================
+   ORDER TYPE BADGE
+   ========================================================== */
+.order-type{
+    text-align:center;
+    font-weight:800;
+    font-size:.85rem;
+    padding:9px;
+    border-radius:12px;
+    margin-bottom:20px;
+}
 
-    background:
-    linear-gradient(
-    135deg,
-    #f59e0b,
-    #ef4444);
+.order-type.buy-now{
+    background:rgba(245,158,11,.12);
+    color:#92400e;
+    border:2px solid rgba(245,158,11,.3);
+}
 
-    }
+.order-type.cart-order{
+    background:rgba(37,99,235,.08);
+    color:var(--c1);
+    border:2px solid rgba(37,99,235,.25);
+}
 
-.cart-order{
-
-
-    background:
-    linear-gradient(
-    135deg,
-    #2563eb,
-    #06b6d4);
-
-
-    }
-
+/* ==========================================================
+   UPI APP CHIPS — genuinely clickable
+   ========================================================== */
 .payment-apps{
-
-
     display:flex;
-
     justify-content:center;
-
-    gap:10px;
-
-    margin-top:25px;
-
+    gap:12px;
     flex-wrap:wrap;
+}
 
+.app-chip{
+    display:flex;
+    align-items:center;
+    gap:8px;
+    padding:12px 18px;
+    border-radius:14px;
+    border:2.5px solid #e2e8f0;
+    background:#f8fafc;
+    font-weight:700;
+    font-size:.85rem;
+    color:#334155;
+    cursor:pointer;
+    transition:.2s;
+    text-decoration:none;
+    -webkit-tap-highlight-color:transparent;
+}
 
-    }
+.app-chip .dot{
+    width:10px;
+    height:10px;
+    border-radius:50%;
+    flex-shrink:0;
+}
 
-.payment-apps span{
+.app-chip[data-app="phonepe"] .dot{ background:var(--phonepe); }
+.app-chip[data-app="gpay"] .dot{ background:var(--gpay); }
+.app-chip[data-app="paytm"] .dot{ background:var(--paytm); }
 
+.app-chip:hover{
+    transform:translateY(-3px);
+    box-shadow: 3px 3px 0 rgba(15,23,42,.12);
+    color:#334155;
+}
 
-    background:
-    rgba(81, 147, 247, 0.12);
+.app-chip.selected{
+    border-color:var(--dark);
+    background:white;
+    box-shadow: 3px 3px 0 var(--c1);
+    color:var(--dark);
+}
 
-    padding:10px 18px;
+@media(max-width:480px){
+    .app-chip{ flex:1 1 100%; justify-content:center; }
+}
 
-    border-radius:50px;
+/* ==========================================================
+   TOAST — click feedback for app chip selection
+   ========================================================== */
+.payment-toast{
+    position:fixed;
+    left:50%;
+    bottom:30px;
+    transform:translateX(-50%) translateY(20px);
+    background:var(--dark);
+    color:white;
+    padding:14px 24px;
+    border-radius:14px;
+    font-weight:700;
+    font-size:.9rem;
+    box-shadow: 0 12px 30px rgba(0,0,0,.25);
+    opacity:0;
+    pointer-events:none;
+    transition: opacity .3s ease, transform .3s ease;
+    z-index:1000;
+    max-width:90%;
+    text-align:center;
+}
 
+.payment-toast.show{
+    opacity:1;
+    transform:translateX(-50%) translateY(0);
+}
 
-    }
-
+/* ==========================================================
+   UPLOAD CARD
+   ========================================================== */
 .upload-card h3{
     font-weight:800;
-    }
+    color:var(--dark);
+    margin-bottom:6px;
+}
+
+.upload-card p{
+    color:#64748b;
+    font-size:.88rem;
+    margin-bottom:20px;
+}
 
 .upload-area{
+    position:relative;
+    border:2.5px dashed #cbd5e1;
+    border-radius:16px;
+    padding:30px 16px;
+    text-align:center;
+    background:#f8fafc;
+    transition:.25s;
+    cursor:pointer;
+    margin-bottom:20px;
+}
 
+.upload-area.drag-over{
+    border-color:var(--c1);
+    background:rgba(37,99,235,.06);
+}
 
-    margin-top:20px;
+.upload-area.has-file{
+    border-style:solid;
+    border-color:var(--c4);
+    background:rgba(5,150,105,.05);
+}
 
-    margin-bottom:25px;
-
-
-    }
-
-.payment-btn{
-
-
+.upload-area input[type="file"]{
+    position:absolute;
+    inset:0;
+    opacity:0;
+    cursor:pointer;
     width:100%;
+    height:100%;
+}
 
-    border:none;
+.upload-icon{
+    font-size:2.2rem;
+    color:#94a3b8;
+    margin-bottom:8px;
+    display:block;
+}
 
-    padding:15px;
+.upload-area.has-file .upload-icon{
+    color:var(--c4);
+}
 
-    border-radius:18px;
-
-    font-size:18px;
-
+.upload-label{
     font-weight:700;
+    color:#475569;
+    font-size:.9rem;
+}
 
+.upload-filename{
+    margin-top:8px;
+    font-weight:600;
+    font-size:.82rem;
+    color:var(--c4);
+    word-break:break-all;
+}
+
+.upload-preview{
+    display:none;
+    max-width:140px;
+    max-height:140px;
+    margin:12px auto 0;
+    border-radius:12px;
+    border:2px solid var(--c4);
+    object-fit:cover;
+}
+
+.upload-preview.show{
+    display:block;
+}
+
+/* ==========================================================
+   PLACE ORDER BUTTON
+   ========================================================== */
+.payment-btn{
+    width:100%;
+    border:none;
+    border-radius:14px;
+    padding:16px;
+    font-size:1.05rem;
+    font-weight:800;
     color:white;
-
-    background:
-    linear-gradient(
-    135deg,
-    #12eba3,
-    #067e32);
-
-    transition:.4s;
-
-
-    }
+    background:var(--dark);
+    box-shadow: 5px 5px 0 var(--c4);
+    transition:.15s;
+}
 
 .payment-btn:hover{
+    color:white;
+    transform:translate(2px,2px);
+    box-shadow: 3px 3px 0 var(--c4);
+}
 
+.payment-btn:active{
+    transform:translate(5px,5px);
+    box-shadow:none;
+}
 
-    transform:
-    translateY(-4px);
-
-    box-shadow:
-    0 15px 30px rgba(34,197,94,.4);
-
-
-    }
-
-@keyframes slideUp{
-
-
-    from{
-
-        opacity:0;
-
-        transform:
-        translateY(40px);
-    }
-
-    to{
-
-        opacity:1;
-
-        transform:
-        translateY(0);
-    }
-
-
-    }
+.payment-btn:disabled{
+    opacity:.6;
+    cursor:not-allowed;
+    transform:none;
+    box-shadow: 5px 5px 0 #cbd5e1;
+}

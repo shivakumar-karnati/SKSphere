@@ -162,3 +162,562 @@ document.addEventListener('DOMContentLoaded', function () {
     });
 
 });
+
+/* ==========================================================
+   ORDER SUCCESS — confetti burst (vanilla JS, no libraries)
+   Runs once on page load, cleans itself up after ~3.5s
+   ========================================================== */
+
+document.addEventListener('DOMContentLoaded', function () {
+
+    const canvas = document.getElementById('confetti-canvas');
+    if (!canvas) return;
+
+    const ctx = canvas.getContext('2d');
+    let width, height;
+
+    function resize() {
+        width = canvas.width = window.innerWidth;
+        height = canvas.height = window.innerHeight;
+    }
+    resize();
+    window.addEventListener('resize', resize);
+
+    const colors = ['#2563eb', '#059669', '#f59e0b', '#e11d48', '#7c3aed'];
+    const pieceCount = window.innerWidth < 576 ? 70 : 140;
+    const pieces = [];
+
+    function randomBetween(min, max) {
+        return Math.random() * (max - min) + min;
+    }
+
+    for (let i = 0; i < pieceCount; i++) {
+        pieces.push({
+            x: randomBetween(0, width),
+            y: randomBetween(-height, 0),
+            size: randomBetween(6, 11),
+            color: colors[Math.floor(Math.random() * colors.length)],
+            speedY: randomBetween(2, 5),
+            speedX: randomBetween(-1.5, 1.5),
+            rotation: randomBetween(0, 360),
+            rotationSpeed: randomBetween(-6, 6),
+            shape: Math.random() > 0.5 ? 'rect' : 'circle'
+        });
+    }
+
+    let startTime = null;
+    const duration = 3200; // ms
+
+    function draw(timestamp) {
+        if (!startTime) startTime = timestamp;
+        const elapsed = timestamp - startTime;
+
+        ctx.clearRect(0, 0, width, height);
+
+        pieces.forEach(p => {
+            p.x += p.speedX;
+            p.y += p.speedY;
+            p.rotation += p.rotationSpeed;
+
+            ctx.save();
+            ctx.translate(p.x, p.y);
+            ctx.rotate((p.rotation * Math.PI) / 180);
+            ctx.fillStyle = p.color;
+
+            if (p.shape === 'rect') {
+                ctx.fillRect(-p.size / 2, -p.size / 4, p.size, p.size / 2);
+            } else {
+                ctx.beginPath();
+                ctx.arc(0, 0, p.size / 2, 0, Math.PI * 2);
+                ctx.fill();
+            }
+
+            ctx.restore();
+        });
+
+        if (elapsed < duration) {
+            requestAnimationFrame(draw);
+        } else {
+            // Fade out canvas, then remove it from the DOM
+            canvas.style.transition = 'opacity .6s ease';
+            canvas.style.opacity = '0';
+            setTimeout(() => canvas.remove(), 600);
+        }
+    }
+
+    requestAnimationFrame(draw);
+});
+
+
+
+/* ==========================================================
+   PAYMENT PENDING — rotating status messages + elapsed timer
+   Purely cosmetic (real status comes from your backend/admin
+   verification), but gives the waiting page a "live" feel.
+   ========================================================== */
+
+document.addEventListener('DOMContentLoaded', function () {
+
+    const messageEl = document.getElementById('status-message');
+    const timerEl = document.getElementById('status-timer-value');
+
+    if (!messageEl && !timerEl) return;
+
+    /* ---------- Rotating status messages ---------- */
+    if (messageEl) {
+        const messages = [
+            'Checking your payment screenshot...',
+            'Verifying transaction details...',
+            'Almost there, hang tight...',
+            'Our team is reviewing your payment...'
+        ];
+
+        let index = 0;
+        messageEl.textContent = messages[0];
+
+        setInterval(() => {
+            index = (index + 1) % messages.length;
+            messageEl.style.opacity = '0';
+
+            setTimeout(() => {
+                messageEl.textContent = messages[index];
+                messageEl.style.opacity = '1';
+            }, 300);
+        }, 3200);
+    }
+
+    /* ---------- Elapsed time counter ---------- */
+    if (timerEl) {
+        let seconds = 0;
+
+        setInterval(() => {
+            seconds++;
+            const mins = Math.floor(seconds / 60).toString().padStart(2, '0');
+            const secs = (seconds % 60).toString().padStart(2, '0');
+            timerEl.textContent = `${mins}:${secs}`;
+        }, 1000);
+    }
+
+});
+
+
+
+/* ==========================================================
+   PAYMENT PAGE — interactive behaviors
+   1. Clickable UPI app chips -> highlight + guide to QR + toast
+   2. Drag-and-drop screenshot upload with live preview
+   3. Countdown timer for payment urgency
+   ========================================================== */
+
+document.addEventListener('DOMContentLoaded', function () {
+
+    /* ---------- Toast helper ---------- */
+    let toastEl = document.querySelector('.payment-toast');
+    if (!toastEl) {
+        toastEl = document.createElement('div');
+        toastEl.className = 'payment-toast';
+        document.body.appendChild(toastEl);
+    }
+
+    let toastTimeout;
+    function showToast(message) {
+        toastEl.textContent = message;
+        toastEl.classList.add('show');
+        clearTimeout(toastTimeout);
+        toastTimeout = setTimeout(() => {
+            toastEl.classList.remove('show');
+        }, 2600);
+    }
+
+    /* ---------- 1. UPI app chips ---------- */
+    const appChips = document.querySelectorAll('.app-chip');
+    const qrBox = document.querySelector('.qr-box');
+
+    const appNames = {
+        phonepe: 'PhonePe',
+        gpay: 'Google Pay',
+        paytm: 'Paytm'
+    };
+
+    appChips.forEach(chip => {
+        chip.addEventListener('click', function (e) {
+            // If the chip is a real deep-link (has an href starting with a scheme other than '#'),
+            // let the browser attempt to open the app naturally — we just also show guidance.
+            const app = chip.dataset.app;
+
+            appChips.forEach(c => c.classList.remove('selected'));
+            chip.classList.add('selected');
+
+            if (qrBox) {
+                qrBox.classList.remove('pulse');
+                void qrBox.offsetWidth; // restart animation
+                qrBox.classList.add('pulse');
+                qrBox.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            }
+
+            showToast(`Scan the QR code above using ${appNames[app] || 'your UPI app'}`);
+        });
+    });
+
+    /* ---------- 2. Drag-and-drop upload with preview ---------- */
+    const uploadArea = document.querySelector('.upload-area');
+    const fileInput = uploadArea ? uploadArea.querySelector('input[type="file"]') : null;
+
+    if (uploadArea && fileInput) {
+
+        const icon = document.createElement('i');
+        icon.className = 'bi bi-cloud-arrow-up-fill upload-icon';
+
+        const label = document.createElement('div');
+        label.className = 'upload-label';
+        label.textContent = 'Tap or drag your screenshot here';
+
+        const filename = document.createElement('div');
+        filename.className = 'upload-filename';
+
+        const preview = document.createElement('img');
+        preview.className = 'upload-preview';
+
+        // Move the file input to the end so our custom UI renders above it visually,
+        // while the input itself still covers the area for click/drag handling.
+        uploadArea.prepend(preview);
+        uploadArea.prepend(filename);
+        uploadArea.prepend(label);
+        uploadArea.prepend(icon);
+
+        function handleFile(file) {
+            if (!file) return;
+
+            uploadArea.classList.add('has-file');
+            icon.className = 'bi bi-check-circle-fill upload-icon';
+            label.textContent = 'Screenshot ready';
+            filename.textContent = file.name;
+
+            if (file.type.startsWith('image/')) {
+                const reader = new FileReader();
+                reader.onload = (e) => {
+                    preview.src = e.target.result;
+                    preview.classList.add('show');
+                };
+                reader.readAsDataURL(file);
+            }
+        }
+
+        fileInput.addEventListener('change', () => {
+            if (fileInput.files && fileInput.files[0]) {
+                handleFile(fileInput.files[0]);
+            }
+        });
+
+        ['dragenter', 'dragover'].forEach(evt => {
+            uploadArea.addEventListener(evt, (e) => {
+                e.preventDefault();
+                uploadArea.classList.add('drag-over');
+            });
+        });
+
+        ['dragleave', 'drop'].forEach(evt => {
+            uploadArea.addEventListener(evt, (e) => {
+                e.preventDefault();
+                uploadArea.classList.remove('drag-over');
+            });
+        });
+
+        uploadArea.addEventListener('drop', (e) => {
+            const file = e.dataTransfer.files[0];
+            if (file) {
+                fileInput.files = e.dataTransfer.files;
+                handleFile(file);
+            }
+        });
+    }
+
+    /* ---------- 3. Countdown timer ---------- */
+    const timerEl = document.getElementById('payment-timer-value');
+    const timerWrap = document.querySelector('.payment-timer');
+
+    if (timerEl && timerWrap) {
+        let remaining = 10 * 60; // 10 minutes, cosmetic urgency cue
+
+        const tick = () => {
+            if (remaining <= 0) {
+                timerEl.textContent = '00:00';
+                return;
+            }
+            remaining--;
+            const mins = Math.floor(remaining / 60).toString().padStart(2, '0');
+            const secs = (remaining % 60).toString().padStart(2, '0');
+            timerEl.textContent = `${mins}:${secs}`;
+
+            if (remaining <= 120) {
+                timerWrap.classList.add('urgent');
+            }
+        };
+
+        setInterval(tick, 1000);
+    }
+
+});
+
+
+/* ==========================================================
+   MY ORDERS — status filter tabs (client-side, no reload)
+   ========================================================== */
+
+document.addEventListener('DOMContentLoaded', function () {
+
+    const filterChips = document.querySelectorAll('.filter-chip');
+    const orderCards = document.querySelectorAll('.order-card');
+
+    if (!filterChips.length || !orderCards.length) return;
+
+    filterChips.forEach(chip => {
+        chip.addEventListener('click', function () {
+            const filter = chip.dataset.filter;
+
+            filterChips.forEach(c => c.classList.remove('active'));
+            chip.classList.add('active');
+
+            let visibleCount = 0;
+
+            orderCards.forEach(card => {
+                const status = card.dataset.status;
+
+                if (filter === 'all' || status === filter) {
+                    card.classList.remove('filtered-out');
+                    visibleCount++;
+                } else {
+                    card.classList.add('filtered-out');
+                }
+            });
+
+            // Show/hide a "no orders match this filter" message
+            let emptyMsg = document.getElementById('filter-empty-msg');
+            const ordersList = document.querySelector('.orders-list');
+
+            if (visibleCount === 0) {
+                if (!emptyMsg && ordersList) {
+                    emptyMsg = document.createElement('div');
+                    emptyMsg.id = 'filter-empty-msg';
+                    emptyMsg.className = 'orders-empty';
+                    emptyMsg.innerHTML = `
+                        <div class="empty-icon">🔍</div>
+                        <h3>No orders in this category</h3>
+                        <p>Try a different filter above.</p>
+                    `;
+                    ordersList.appendChild(emptyMsg);
+                }
+            } else if (emptyMsg) {
+                emptyMsg.remove();
+            }
+        });
+    });
+
+});
+
+
+
+
+/* ==========================================================
+   ORDER DETAIL — animated tracker fill, copy address, print
+   ========================================================== */
+
+document.addEventListener('DOMContentLoaded', function () {
+
+    /* ---------- 1. Animate the tracker fill line ---------- */
+    const wrapper = document.querySelector('.tracking-wrapper');
+
+    if (wrapper) {
+        const steps = wrapper.querySelectorAll('.step');
+        const activeSteps = wrapper.querySelectorAll('.step.active');
+        const totalSteps = steps.length;
+
+        // Mark the last active step as "current" for the pulsing highlight
+        if (activeSteps.length > 0) {
+            activeSteps[activeSteps.length - 1].classList.add('current');
+        }
+
+        // Build the fill line element and animate its width in
+        if (totalSteps > 1) {
+            const fillLine = document.createElement('div');
+            fillLine.className = 'line-fill';
+            wrapper.prepend(fillLine);
+
+            // Percentage of the track filled, based on completed steps
+            const completedRatio = (activeSteps.length - 1) / (totalSteps - 1);
+            const percent = Math.max(0, Math.min(100, completedRatio * 88)); // 88% ~ matches step-center spacing
+
+            requestAnimationFrame(() => {
+                setTimeout(() => {
+                    fillLine.style.width = percent + '%';
+                }, 200);
+            });
+        }
+    }
+
+    /* ---------- 2. Copy address to clipboard ---------- */
+    const copyBtn = document.getElementById('copy-address-btn');
+
+    if (copyBtn) {
+        copyBtn.addEventListener('click', function () {
+            const addressText = copyBtn.dataset.address || '';
+
+            if (!addressText) return;
+
+            navigator.clipboard.writeText(addressText).then(() => {
+                const originalHTML = copyBtn.innerHTML;
+                copyBtn.classList.add('copied');
+                copyBtn.innerHTML = '<i class="bi bi-check-lg"></i> Copied';
+
+                setTimeout(() => {
+                    copyBtn.classList.remove('copied');
+                    copyBtn.innerHTML = originalHTML;
+                }, 2000);
+            }).catch(() => {
+                // Clipboard API unavailable (e.g. non-HTTPS) — fail silently, no broken UI
+            });
+        });
+    }
+
+    /* ---------- 3. Print order summary ---------- */
+    const printBtn = document.getElementById('print-order-btn');
+
+    if (printBtn) {
+        printBtn.addEventListener('click', function () {
+            window.print();
+        });
+    }
+
+});
+
+
+
+
+
+
+
+/* ==========================================================
+   PROFILE PAGE — animated count-up for stat numbers
+   ========================================================== */
+
+document.addEventListener('DOMContentLoaded', function () {
+
+    const statNumbers = document.querySelectorAll('.stat-number');
+    if (!statNumbers.length) return;
+
+    function animateCount(el) {
+        const raw = el.dataset.value || '0';
+        const prefix = el.dataset.prefix || '';
+        const target = parseFloat(raw.replace(/[^0-9.]/g, '')) || 0;
+        const hasDecimal = raw.includes('.');
+        const duration = 1100;
+        let startTime = null;
+
+        function step(timestamp) {
+            if (!startTime) startTime = timestamp;
+            const progress = Math.min((timestamp - startTime) / duration, 1);
+            // ease-out cubic
+            const eased = 1 - Math.pow(1 - progress, 3);
+            const current = target * eased;
+
+            el.textContent = prefix + (hasDecimal ? current.toFixed(2) : Math.round(current));
+
+            if (progress < 1) {
+                requestAnimationFrame(step);
+            } else {
+                el.textContent = prefix + (hasDecimal ? target.toFixed(2) : target);
+            }
+        }
+
+        requestAnimationFrame(step);
+    }
+
+    // Animate once each card scrolls into view (also fires immediately if already visible)
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                animateCount(entry.target);
+                observer.unobserve(entry.target);
+            }
+        });
+    }, { threshold: 0.3 });
+
+    statNumbers.forEach(el => observer.observe(el));
+
+});
+
+
+
+
+
+/* ==========================================================
+   EDIT PROFILE — live avatar preview, bio counter, save feedback
+   ========================================================== */
+
+document.addEventListener('DOMContentLoaded', function () {
+
+    /* ---------- 1. Live avatar preview on file select ---------- */
+    const avatarWrapper = document.querySelector('.profile-avatar-wrapper');
+    const fileInput = document.getElementById('profile-pic-input');
+
+    if (avatarWrapper && fileInput) {
+
+        avatarWrapper.addEventListener('click', () => fileInput.click());
+
+        fileInput.addEventListener('change', function () {
+            const file = fileInput.files && fileInput.files[0];
+            if (!file || !file.type.startsWith('image/')) return;
+
+            const reader = new FileReader();
+            reader.onload = (e) => {
+                let img = avatarWrapper.querySelector('.profile-avatar-img');
+                const placeholder = avatarWrapper.querySelector('.profile-avatar');
+
+                if (!img) {
+                    img = document.createElement('img');
+                    img.className = 'profile-avatar-img';
+                    avatarWrapper.insertBefore(img, avatarWrapper.firstChild);
+                    if (placeholder) placeholder.style.display = 'none';
+                }
+
+                img.src = e.target.result;
+            };
+            reader.readAsDataURL(file);
+        });
+    }
+
+    /* ---------- 2. Bio character counter ---------- */
+    const bioField = document.getElementById('bio-field');
+    const counterEl = document.getElementById('bio-char-counter');
+    const maxLength = 250;
+
+    if (bioField && counterEl) {
+
+        function updateCounter() {
+            const remaining = maxLength - bioField.value.length;
+            counterEl.textContent = `${bioField.value.length} / ${maxLength}`;
+
+            counterEl.classList.remove('warning', 'limit');
+            if (remaining <= 0) {
+                counterEl.classList.add('limit');
+            } else if (remaining <= 30) {
+                counterEl.classList.add('warning');
+            }
+        }
+
+        bioField.addEventListener('input', updateCounter);
+        updateCounter();
+    }
+
+    /* ---------- 3. Save button loading feedback ---------- */
+    const form = document.querySelector('.edit-profile-card form');
+    const saveBtn = document.querySelector('.save-btn');
+
+    if (form && saveBtn) {
+        form.addEventListener('submit', function () {
+            saveBtn.classList.add('saving');
+            saveBtn.innerHTML = '⏳ Saving...';
+        });
+    }
+
+});

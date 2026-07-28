@@ -1,44 +1,84 @@
 {% extends 'base.html' %}
+{% load static %}
+
+{% block css %}
+<link rel="stylesheet"
+      href="{% static 'css/orders/payment_pending.css' %}">
+{% endblock %}
 
 {% block content %}
 
-<div class="container mt-5 text-center">
+<div class="container py-5">
 
-    <div class="card p-5 shadow">
+    <div class="pending-wrap">
 
-        <h1 class="text-warning">
+        <div class="pending-stepper">
 
-            ⏳ Payment Under Verification
+            <div class="step">
+                <span class="step-circle"><i class="bi bi-check-lg"></i></span>
+                <span class="step-label">Cart</span>
+            </div>
 
-        </h1>
+            <span class="step-line"></span>
 
-        <hr>
+            <div class="step">
+                <span class="step-circle"><i class="bi bi-check-lg"></i></span>
+                <span class="step-label">Checkout</span>
+            </div>
 
-        <p>
+            <span class="step-line"></span>
 
-            Your payment screenshot has been uploaded successfully.
+            <div class="step pending">
+                <span class="step-circle"><i class="bi bi-hourglass-split"></i></span>
+                <span class="step-label">Verifying</span>
+            </div>
 
-        </p>
+        </div>
 
-        <p>
+        <div class="pending-card">
 
-            Our team will verify your payment shortly.
+            <div class="hourglass-wrap">
+                <i class="bi bi-hourglass-split hourglass-icon"></i>
+            </div>
 
-        </p>
+            <h1>⏳ Payment Under Verification</h1>
 
-        <p>
+            <p>
+                Your payment screenshot has been uploaded successfully.
+            </p>
 
-            You can check your order status in
-            <strong>My Orders</strong>.
+            <p>
+                Our team will verify your payment shortly.
+            </p>
 
-        </p>
+            <p>
+                You can check your order status in
+                <strong>My Orders</strong>.
+            </p>
 
-        <a href="{% url 'my_orders' %}"
-           class="btn btn-primary">
+            <div class="status-box">
 
-            View My Orders
+                <div class="status-message" id="status-message">
+                    Checking your payment screenshot...
+                </div>
 
-        </a>
+                <div class="status-timer">
+                    Waiting time: <span id="status-timer-value">00:00</span>
+                </div>
+
+                <div class="progress-track">
+                    <div class="progress-fill"></div>
+                </div>
+
+            </div>
+
+            <a href="{% url 'my_orders' %}"
+               class="pending-btn">
+                <i class="bi bi-bag-check-fill"></i>
+                View My Orders
+            </a>
+
+        </div>
 
     </div>
 

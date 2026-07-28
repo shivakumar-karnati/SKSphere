@@ -10,116 +10,138 @@
 
 <div class="profile-page">
 
+    <div class="profile-header">
 
-<div class="profile-header">
+        <div class="profile-avatar">
 
-    <div class="profile-avatar">
+            {% if user.profile.profile_pic %}
 
-        {% if user.profile.profile_pic %}
+                <img
+                    src="{{ user.profile.profile_pic.url }}"
+                    alt="Profile">
 
-            <img
-                src="{{ user.profile.profile_pic.url }}"
-                alt="Profile">
+            {% else %}
 
-        {% else %}
+                {{ user.username|first|upper }}
 
-            {{ user.username|first|upper }}
+            {% endif %}
 
+            <a href="{% url 'edit_profile' %}" class="edit-overlay">
+                <i class="bi bi-camera-fill"></i>
+            </a>
+
+        </div>
+
+        <div class="profile-details">
+
+            <h1>{{ user.username }}</h1>
+
+            <p>{{ user.email }}</p>
+
+            <div class="badges-row">
+
+                <span class="account-badge bg-success">
+                    <i class="bi bi-check-circle-fill"></i>
+                    Active Account
+                </span>
+
+                {% if request.user.is_staff %}
+                <span class="admin-badge">
+                    <i class="bi bi-shield-fill-check"></i>
+                    Admin
+                </span>
+                {% endif %}
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <div class="stats-grid">
+
+        <div class="stat-card">
+            <h2 class="stat-number" data-value="{{ order_count }}">0</h2>
+            <p>Total Orders</p>
+        </div>
+
+        <div class="stat-card">
+            <h2 class="stat-number" data-value="{{ total_spend }}" data-prefix="₹">₹0</h2>
+            <p>Total Spent</p>
+        </div>
+
+        <div class="stat-card">
+            <h2 class="stat-number" data-value="{{ wishlist_count }}">0</h2>
+            <p>Wishlist</p>
+        </div>
+
+        <div class="stat-card">
+            <h2 class="stat-number" data-value="{{ review_count }}">0</h2>
+            <p>Reviews</p>
+        </div>
+
+    </div>
+
+    <div class="action-buttons">
+
+        {% if request.user.is_staff %}
+        <a href="{% url 'dashboard' %}" class="dashboard-btn">
+            <i class="bi bi-speedometer2"></i>
+            Admin Dashboard
+        </a>
         {% endif %}
 
-    </div>
+        <a href="{% url 'my_orders' %}" class="profile-btn">
+            <i class="bi bi-bag-check-fill"></i>
+            My Orders
+        </a>
 
-    <div class="profile-details">
+        <a href="{% url 'wishlist' %}" class="profile-btn">
+            <i class="bi bi-heart-fill"></i>
+            Wishlist
+        </a>
 
-        <h1>{{ user.username }}</h1>
+        <a href="{% url 'edit_profile' %}" class="profile-btn">
+            <i class="bi bi-pencil-fill"></i>
+            Edit Profile
+        </a>
 
-        <p>{{ user.email }}</p>
-
-        <span class="account-badge bg-success">
-            Active Account
-        </span>
-        <h1>
-            {% if request.user.is_staff %}
-            Admin
-            {% endif %}
-        </h1>
-        
-
-    </div>
-
-</div>
-
-<div class="stats-grid">
-
-    <div class="stat-card">
-        <h2>{{ order_count }}</h2>
-        <p>Total Orders</p>
-    </div>
-
-    <div class="stat-card">
-        <h2>₹{{ total_spend }}</h2>
-        <p>Total Spent</p>
-    </div>
-
-    <div class="stat-card">
-        <h2>{{ wishlist_count }}</h2>
-        <p>Wishlist</p>
-    </div>
-
-    <div class="stat-card">
-        <h2>{{ review_count }}</h2>
-        <p>Reviews</p>
-    </div>
-
-</div>
-
-<div class="action-buttons">
-
-    {% if request.user.is_staff %}
-    <a href="{% url 'dashboard' %}" class="dashboard-btn">
-        📊 Admin Dashboard
-    </a>
-    {% endif %}
-
-    <a href="{% url 'my_orders' %}" class="profile-btn">
-        My Orders
-    </a>
-
-    <a href="{% url 'wishlist' %}" class="profile-btn">
-        Wishlist
-    </a>
-    <a href="{% url 'edit_profile' %}" class="profile-btn">
-        Edit profile
-    </a>
-
-    <a href="{% url 'change_password' %}" class="profile-btn">
-        Change Password
-    </a>
-
-</div>
-
-<div class="recent-orders">
-
-    <h2>Recent Orders</h2>
-
-    {% for order in recent_orders %}
-
-    <div class="order-card">
-
-        <h5>Order #{{ order.id }}</h5>
-
-        <p>{{ order.status }}</p>
-
-        <strong>
-            ₹{{ order.total_amount }}
-        </strong>
+        <a href="{% url 'change_password' %}" class="profile-btn">
+            <i class="bi bi-key-fill"></i>
+            Change Password
+        </a>
 
     </div>
 
-    {% endfor %}
+    <div class="recent-orders">
 
-</div>
+        <div class="recent-orders-header">
+            <h2>Recent Orders</h2>
+            <a href="{% url 'my_orders' %}" class="view-all-link">View All →</a>
+        </div>
 
+        {% for order in recent_orders %}
+
+        <div class="order-card">
+
+            <div>
+                <h5>Order #{{ order.id }}</h5>
+                <p>{{ order.status }}</p>
+            </div>
+
+            <strong>₹{{ order.total_amount }}</strong>
+
+        </div>
+
+        {% empty %}
+
+        <div class="orders-empty-inline">
+            No orders yet — your recent orders will show up here.
+        </div>
+
+        {% endfor %}
+
+    </div>
 
 </div>
 
