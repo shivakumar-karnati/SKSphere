@@ -11,6 +11,8 @@ Pillow==11.3.0
 cloudinary==1.44.1
 django-cloudinary-storage==0.3.0
 
+matplotlib==3.10.6
+
 qrcode==8.2
 reportlab==4.5.1
 
