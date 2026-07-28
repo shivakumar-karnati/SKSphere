@@ -43,7 +43,7 @@ class Order(models.Model):
         )
     STATUS_CHOICES = [
 
-    ('payment Verification', 'payment Verification'),
+    ('Payment Verification', 'Payment Verification'),
 
     ('Processing', 'Processing'),
 
@@ -57,7 +57,7 @@ class Order(models.Model):
     status = models.CharField(
         max_length=30,
         choices=STATUS_CHOICES,
-        default='payment Verification'
+        default='Payment Verification'
     )
 
     created_at = models.DateTimeField(

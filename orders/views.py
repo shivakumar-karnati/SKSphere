@@ -213,7 +213,7 @@ def place_order(request):
         payment_method=payment_method,
         total_amount=final_total,
 
-        status='payment Verification'
+        status='Payment Verification'
     )
 
     for item in cart_items:
@@ -591,7 +591,7 @@ def cancel_order(request, order_id):
     
 
     if order.status in [
-        'payment Verification',
+        'Payment Verification',
         'Processing'
     ]:
 

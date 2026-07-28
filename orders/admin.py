@@ -51,7 +51,7 @@ class OrderAdmin(admin.ModelAdmin):
     )
     def colored_status(self, obj):
 
-        if obj.status == "payment Verification":
+        if obj.status == "Payment Verification":
             color = "orange"
 
         elif obj.status == "Processing":

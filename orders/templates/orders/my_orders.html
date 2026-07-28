@@ -36,7 +36,7 @@
 
         {% for order in orders %}
 
-        <div class="order-card" data-status="{% if order.status == 'payment Verification' %}pending{% elif order.status == 'Processing' %}processing{% elif order.status == 'Shipped' %}shipped{% elif order.status == 'Delivered' %}delivered{% else %}cancelled{% endif %}">
+        <div class="order-card" data-status="{% if order.status == 'Payment Verification' %}pending{% elif order.status == 'Processing' %}processing{% elif order.status == 'Shipped' %}shipped{% elif order.status == 'Delivered' %}delivered{% else %}cancelled{% endif %}">
 
             <div class="order-header">
 
@@ -45,7 +45,7 @@
                     <span class="order-date">{{ order.created_at }}</span>
                 </div>
 
-                {% if order.status == "payment Verification" %}
+                {% if order.status == "Payment Verification" %}
                     <span class="status pending">⏳ Payment Verification</span>
                 {% elif order.status == "Processing" %}
                     <span class="status processing">⚙️ Processing</span>
@@ -63,7 +63,7 @@
 
             <div class="order-progress">
 
-                <div class="p-step {% if order.status == 'payment Verification' %}current{% else %}done{% endif %}">
+                <div class="p-step {% if order.status == 'Payment Verification' %}current{% else %}done{% endif %}">
                     <span class="p-dot"><i class="bi bi-check-lg"></i></span>
                     <span class="p-label">Placed</span>
                 </div>
@@ -135,7 +135,7 @@
                             View Details
                         </a>
 
-                        {% if order.status == 'payment Verification' or order.status == 'Processing' %}
+                        {% if order.status == 'Payment Verification' or order.status == 'Processing' %}
 
                         <a href="{% url 'cancel_order' order.id %}"
                            class="order-btn cancel"
