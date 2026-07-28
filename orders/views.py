@@ -1161,9 +1161,11 @@ def place_buy_now_order(request):
             order=order,
             screenshot=screenshot
         )
-
-    send_order_email(order)
-
+    try:
+        send_order_email(order)
+    except Exception as e:
+        print("Email sending failed :", e)
+        
     request.session.pop(
         'buy_now_product',
         None
