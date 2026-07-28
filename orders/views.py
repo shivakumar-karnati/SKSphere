@@ -711,12 +711,12 @@ Total Amount: ₹{order.total_amount}
 Thank you for shopping with SKSphere.
 """,
 
-            from_email=settings.DEFAULT_FROM_EMAIL,
+            from_email=None,
             
 
             recipient_list=[order.user.email],
 
-            fail_silently=False
+            fail_silently=True
         )
 
         print("✅ Email sent successfully")
