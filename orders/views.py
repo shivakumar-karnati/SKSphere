@@ -693,12 +693,11 @@ def payment_page(request):
             'total': total
         }
     )
-
 def send_order_email(order):
+    print(order.user.email)
     try:
         send_mail(
             subject=f"Order #{order.id} Confirmed",
-
             message=f"""
 Hello {order.full_name},
 
@@ -710,21 +709,17 @@ Total Amount: ₹{order.total_amount}
 
 Thank you for shopping with SKSphere.
 """,
-
             from_email=None,
-            
-
             recipient_list=[order.user.email],
-
-            fail_silently=True
+            fail_silently=False
         )
 
-        print("✅ Email sent successfully")
+        print("Email sent successfully")
 
     except Exception as e:
-        print("❌ Email sending failed:", repr(e))
+        print("Email sending failed:", e)
 
-        
+
 @login_required
 def apply_coupon(request):
 
