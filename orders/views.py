@@ -1080,6 +1080,9 @@ def place_buy_now_order(request):
     product_id = request.session.get(
         'buy_now_product'
     )
+    if not product_id:
+        messages.error(request, "Your buy-now session expired. Please try again.")
+        return redirect('products')
 
     qty = request.session.get(
         'buy_now_qty',
