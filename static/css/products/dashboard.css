@@ -1,422 +1,405 @@
+/* ==========================================================
+   ADMIN DASHBOARD — "Sticker & Receipt" language, data-dense
+   ========================================================== */
 
-.dashboard-card{
-
-    color:white;
-    border-radius:20px;
-    transition:0.4s;
+:root{
+    --c1:#2563eb;
+    --purple:#7c3aed;
+    --amber:#f59e0b;
+    --green:#059669;
+    --cyan:#06b6d4;
+    --red:#ef4444;
+    --dark:#0f172a;
 }
 
-.dashboard-card:hover{
-
-    transform:translateY(-8px);
+body{
+    background:#f4f7ff;
 }
 
-.products-card{
-
-    background:linear-gradient(135deg,#4f46e5,#7c3aed);
-}
-
-.users-card{
-
-    background:linear-gradient(135deg,#2563eb,#06b6d4);
-}
-
-.orders-card{
-
-    background:linear-gradient(135deg,#f59e0b,#f97316);
-}
-.pending-card{
-
-    background:linear-gradient(
-        135deg,
-        #ef4444,
-        #dc2626
-    );
-
-}
-.shipped-card{
-
-    background:linear-gradient(
-        135deg,
-        #2563eb,
-        #1d4ed8
-    );
-
-}
-.delivered-card{
-
-    background:linear-gradient(
-        135deg,
-        #16a34a,
-        #15803d
-    );
-
-}
-.cancelled-card{
-
-    background:linear-gradient(
-        135deg,
-        #f92222,
-        #d64a1c
-    );
-
-}
-
-.revenue-card{
-
-    background:linear-gradient(135deg,#16a34a,#22c55e);
-}
-
-.dashboard-card h1{
-
-    font-size:2.5rem;
-    font-weight:700;
-}
-
-.dashboard-card h5{
-
-    opacity:0.9;
-}
-
-table{
-
-    margin-bottom:0;
-}
-
-.dashboard-box{
-
-    border:none;
-
-    border-radius:25px;
-
-    height:380px;
-
-    overflow:hidden;
-
-    box-shadow:
-    0 15px 35px rgba(0,0,0,.08);
-
-    transition:.4s;
-}
-
-.dashboard-box:hover{
-
-    transform:translateY(-8px);
-
-    box-shadow:
-    0 25px 50px rgba(37,99,235,.18);
-}
-
-.scroll-area{
-
-    max-height:280px;
-
-    overflow-y:auto;
-
-    padding-right:8px;
-}
-
-.scroll-area::-webkit-scrollbar{
-
-    width:6px;
-}
-
-.scroll-area::-webkit-scrollbar-thumb{
-
-    background:#4f46e5;
-
-    border-radius:10px;
-}
-
-.selling-item{
-
-    display:flex;
-
-    justify-content:space-between;
-
-    padding:12px;
-
-    border-bottom:1px solid #e5e7eb;
-}
-
-.review-item{
-
-    padding:12px;
-
-    border-bottom:1px solid #e5e7eb;
-}
-
-.review-item p{
-
-    margin-top:5px;
-
-    margin-bottom:0;
-
-    font-size:.9rem;
-}
-
-.sales-chart{
-
-    width:100%;
-
-    max-height:320px;
-
-    object-fit:contain;
-}
-
-/* ===================================
-   ADMIN PROFILE PREMIUM
-=================================== */
-
+/* ==========================================================
+   ADMIN PROFILE HEADER
+   ========================================================== */
 .admin-profile-card{
-    position:relative;
-    overflow:hidden;
-
-    background:linear-gradient(
-        135deg,
-        #2563eb,
-        #4f46e5,
-        #7c3aed
-    );
-
-    background-size:300% 300%;
-
-    border-radius:20px;
-    padding:35px;
-
     display:flex;
     justify-content:space-between;
     align-items:center;
     flex-wrap:wrap;
-    gap:25px;
-    margin-top: 10px;
-
-    color:white;
-
-    box-shadow:
-    0 20px 60px rgba(37,99,235,.25);
-
-    animation:
-    gradientMove 8s ease infinite,
-    fadeUp .8s ease;
+    gap:20px;
+    background:white;
+    border:3px solid var(--dark);
+    border-radius:22px;
+    box-shadow: 7px 7px 0 rgba(37,99,235,.16);
+    padding:26px 30px;
+    opacity:0;
+    transform:translateY(20px);
+    animation:cardIn .5s ease forwards;
 }
 
-.admin-profile-card::before{
-    content:"";
-    position:absolute;
-    width:350px;
-    height:350px;
-
-    background:
-    radial-gradient(
-        rgba(255,255,255,.18),
-        transparent
-    );
-
-    top:-150px;
-    right:-100px;
+@keyframes cardIn{
+    to{ opacity:1; transform:translateY(0); }
 }
 
 .profile-left{
     display:flex;
     align-items:center;
-    gap:25px;
+    gap:18px;
 }
 
 .admin-avatar{
-    width:100px;
-    height:100px;
-
+    width:64px;
+    height:64px;
     border-radius:50%;
-
-    border:4px solid rgba(255,255,255,.5);
-
-    box-shadow:
-    0 10px 30px rgba(0,0,0,.2);
-
-    transition:.4s;
-}
-
-.admin-avatar:hover{
-    transform:scale(1.08) rotate(5deg);
+    border:3px solid var(--dark);
+    box-shadow: 3px 3px 0 rgba(37,99,235,.2);
 }
 
 .profile-left h2{
-    font-size:2rem;
-    font-weight:800;
-    margin-bottom:5px;
+    font-weight:900;
+    color:var(--dark);
+    font-size:1.3rem;
+    margin-bottom:2px;
 }
 
 .profile-left p{
-    font-size:1rem;
-    opacity:.9;
+    font-weight:700;
+    color:var(--c1);
+    font-size:.85rem;
+    margin-bottom:2px;
 }
 
 .profile-left small{
-    opacity:.8;
+    color:#94a3b8;
+    font-weight:600;
+    font-size:.75rem;
 }
-
-/* Buttons */
 
 .profile-right{
     display:flex;
+    gap:10px;
     flex-wrap:wrap;
-    gap:15px;
 }
 
 .admin-btn{
-    padding:14px 22px;
-
-    border-radius:15px;
-
-    text-decoration:none;
-
-    background:
-    rgba(255,255,255,.15);
-
-    backdrop-filter:blur(10px);
-
-    border:1px solid rgba(255,255,255,.25);
-
-    color:white;
-
+    display:inline-flex;
+    align-items:center;
+    gap:6px;
+    padding:10px 16px;
+    border-radius:12px;
+    border:2px solid var(--dark);
+    background:white;
+    color:var(--dark) !important;
     font-weight:700;
-
-    transition:.4s;
+    font-size:.8rem;
+    text-decoration:none;
+    transition:.15s;
 }
 
 .admin-btn:hover{
-    background:white;
-    color:#2563eb;
-
-    transform:
-    translateY(-5px)
-    scale(1.05);
-
-    box-shadow:
-    0 15px 35px rgba(255,255,255,.25);
+    background:var(--dark);
+    color:white !important;
+    transform:translateY(-2px);
 }
 
-/* ===================================
+@media(max-width:767px){
+    .admin-profile-card{ flex-direction:column; align-items:flex-start; padding:22px; }
+    .profile-right{ width:100%; }
+    .admin-btn{ flex:1; justify-content:center; }
+}
+
+/* ==========================================================
    QUICK ACTIONS
-=================================== */
-
+   ========================================================== */
 .quick-actions-card{
-    border:none;
-    border-radius:30px;
-
-    background:white;
-
-    padding:10px;
-
-    box-shadow:
-    0 15px 40px rgba(0,0,0,.08);
-
-    animation:fadeUp .9s ease;
+    border:3px solid var(--dark) !important;
+    border-radius:22px !important;
+    box-shadow: 7px 7px 0 rgba(124,58,237,.16) !important;
+    opacity:0;
+    transform:translateY(20px);
+    animation:cardIn .5s ease forwards;
+    animation-delay:.1s;
 }
 
 .quick-actions-title{
-    font-weight:800;
-    color:#0f172a;
+    font-weight:900;
+    color:var(--dark);
 }
 
 .quick-actions-grid{
     display:grid;
-
-    grid-template-columns:
-    repeat(auto-fit,minmax(200px,1fr));
-
-    gap:20px;
+    grid-template-columns:repeat(5,1fr);
+    gap:14px;
 }
 
 .action-btn{
-    position:relative;
-
-    overflow:hidden;
-
-    border-radius:20px;
-
-    text-decoration:none;
-
-    padding:25px;
-
-    color:white;
-
-    font-weight:700;
-
     display:flex;
     flex-direction:column;
     align-items:center;
     justify-content:center;
-
-    gap:10px;
-
-    min-height:120px;
-
-    transition:.4s;
+    gap:8px;
+    padding:20px 10px;
+    border-radius:16px;
+    text-decoration:none;
+    font-weight:700;
+    font-size:.82rem;
+    color:white !important;
+    transition:.2s;
+    text-align:center;
 }
+
+.action-btn i{ font-size:1.4rem; }
 
 .action-btn:hover{
-    transform:
-    translateY(-8px)
-    scale(1.03);
+    transform:translateY(-5px);
 }
 
-.action-btn i{
+.action-btn.category{ background: linear-gradient(135deg,var(--c1),#4f46e5); }
+.action-btn.product{ background: linear-gradient(135deg,var(--purple),#a855f7); }
+.action-btn.order{ background: linear-gradient(135deg,var(--amber),#f97316); }
+.action-btn.coupon{ background: linear-gradient(135deg,var(--cyan),#0ea5e9); }
+.action-btn.payment{ background: linear-gradient(135deg,var(--green),#10b981); }
+
+@media(max-width:991px){
+    .quick-actions-grid{ grid-template-columns:repeat(3,1fr); }
+}
+
+@media(max-width:576px){
+    .quick-actions-grid{ grid-template-columns:repeat(2,1fr); }
+}
+
+/* ==========================================================
+   STAT CARDS — color-coded, count-up animated
+   ========================================================== */
+.row.g-4{
+    display:grid !important;
+    grid-template-columns:repeat(4,1fr);
+    gap:20px !important;
+    margin:0 !important;
+}
+
+.row.g-4 > div{
+    padding:0 !important;
+    width:auto !important;
+    max-width:none !important;
+}
+
+@media(max-width:1199px){
+    .row.g-4{ grid-template-columns:repeat(3,1fr); }
+}
+
+@media(max-width:767px){
+    .row.g-4{ grid-template-columns:repeat(2,1fr); gap:14px !important; }
+}
+
+.dashboard-card{
+    background:white !important;
+    border:3px solid var(--dark) !important;
+    border-radius:18px !important;
+    box-shadow: 5px 5px 0 rgba(37,99,235,.14) !important;
+    transition:transform .25s ease, box-shadow .25s ease;
+    opacity:0;
+    transform:translateY(18px);
+    animation:cardIn .45s ease forwards;
+}
+
+.dashboard-card:hover{
+    transform:translateY(-5px);
+    box-shadow: 7px 7px 0 rgba(37,99,235,.2) !important;
+}
+
+.dashboard-card h5{
+    font-size:.78rem;
+    font-weight:700;
+    color:#94a3b8;
+    text-transform:uppercase;
+    letter-spacing:.4px;
+    margin-bottom:6px;
+}
+
+.dashboard-card h1{
+    font-weight:900;
     font-size:2rem;
+    color:var(--accent, var(--c1));
+    margin:0;
 }
 
-.action-btn.category{
-    background:linear-gradient(
-        135deg,
-        #06b6d4,
-        #2563eb
-    );
+@media(max-width:576px){
+    .dashboard-card h1{ font-size:1.5rem; }
+    .dashboard-card .card-body{ padding:16px 10px; }
 }
 
-.action-btn.product{
-    background:linear-gradient(
-        135deg,
-        #16a34a,
-        #22c55e
-    );
+.products-card{ --accent:var(--c1); }
+.users-card{ --accent:var(--purple); }
+.orders-card{ --accent:var(--cyan); }
+.revenue-card{ --accent:var(--green); }
+.pending-card{ --accent:var(--amber); }
+.pending-card h1{ animation: pulseNum 1.8s ease-in-out infinite; }
+.shipped-card{ --accent:var(--c1); }
+.low-stock-card{ --accent:#f97316; }
+.outstock-card{ --accent:var(--red); }
+.delivered-card{ --accent:var(--green); }
+.cancelled-card{ --accent:var(--red); }
+
+@keyframes pulseNum{
+    0%,100%{ opacity:1; }
+    50%{ opacity:.55; }
 }
 
-.action-btn.order{
-    background:linear-gradient(
-        135deg,
-        #f59e0b,
-        #f97316
-    );
+/* ==========================================================
+   INFO PANELS — Low Stock / Top Selling / Reviews
+   ========================================================== */
+.dashboard-box{
+    border:3px solid var(--dark) !important;
+    border-radius:20px !important;
+    box-shadow: 6px 6px 0 rgba(37,99,235,.14) !important;
+    height:100%;
+    opacity:0;
+    transform:translateY(20px);
+    animation:cardIn .5s ease forwards;
 }
 
-.action-btn.coupon{
-    background:linear-gradient(
-        135deg,
-        #7c3aed,
-        #9333ea
-    );
+.dashboard-box h4{
+    font-weight:800;
+    color:var(--dark);
+    font-size:1.05rem;
+    margin-bottom:16px;
 }
 
-.action-btn.payment{
-    background:linear-gradient(
-        135deg,
-        #ef4444,
-        #dc2626
-    );
+.scroll-area{
+    max-height:280px;
+    overflow-y:auto;
+    padding-right:6px;
+    scrollbar-width:thin;
+    scrollbar-color:var(--c1) transparent;
 }
 
-@keyframes gradientMove{
+.scroll-area::-webkit-scrollbar{ width:6px; }
+.scroll-area::-webkit-scrollbar-thumb{
+    background:var(--c1);
+    border-radius:10px;
+}
 
-    0%{
-        background-position:0% 50%;
-    }
+.scroll-area .alert{
+    border:none;
+    border-radius:12px;
+    font-weight:600;
+    font-size:.85rem;
+}
 
-    50%{
-        background-position:100% 50%;
-    }
+.scroll-area .alert-danger{
+    background:rgba(239,68,68,.1);
+    color:#991b1b;
+}
 
-    100%{
-        background-position:0% 50%;
-    }
+.scroll-area .alert-success{
+    background:rgba(5,150,105,.1);
+    color:#065f46;
+}
+
+.selling-item,
+.review-item{
+    padding:10px 12px;
+    background:#f8fafc;
+    border-radius:12px;
+    margin-bottom:8px;
+}
+
+.selling-item{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    font-weight:700;
+    font-size:.85rem;
+    color:var(--dark);
+}
+
+.selling-item strong{
+    color:var(--green);
+}
+
+.review-item strong{
+    color:var(--dark);
+    font-size:.85rem;
+}
+
+.review-item small{
+    color:var(--amber);
+    font-weight:700;
+    margin-left:6px;
+}
+
+.review-item p{
+    margin:4px 0 0;
+    font-size:.8rem;
+    color:#64748b;
+}
+
+/* ==========================================================
+   SALES CHART
+   ========================================================== */
+.card.shadow.p-4{
+    border:3px solid var(--dark) !important;
+    border-radius:20px !important;
+    box-shadow: 6px 6px 0 rgba(37,99,235,.14) !important;
+}
+
+.sales-chart{
+    width:100%;
+    height:auto;
+    border-radius:14px;
+}
+
+/* ==========================================================
+   RECENT ORDERS TABLE
+   ========================================================== */
+.card.shadow.border-0{
+    border:3px solid var(--dark) !important;
+    border-radius:20px !important;
+    box-shadow: 6px 6px 0 rgba(37,99,235,.14) !important;
+}
+
+.table-responsive-wrap{
+    overflow-x:auto;
+    -webkit-overflow-scrolling:touch;
+}
+
+.table thead th{
+    font-weight:800;
+    font-size:.78rem;
+    text-transform:uppercase;
+    letter-spacing:.4px;
+    color:#94a3b8;
+    border-bottom:2px solid #e2e8f0;
+    white-space:nowrap;
+}
+
+.table tbody td{
+    font-weight:600;
+    font-size:.88rem;
+    color:var(--dark);
+    white-space:nowrap;
+}
+
+.table tbody tr{
+    transition:.15s;
+}
+
+.table tbody tr:hover{
+    background:#f8fafc;
+}
+
+.badge{
+    padding:7px 14px;
+    border-radius:50px;
+    font-weight:700;
+    font-size:.72rem;
+}
+
+.badge.bg-warning{ background:rgba(245,158,11,.15) !important; color:#92400e !important; }
+.badge.bg-primary{ background:rgba(37,99,235,.12) !important; color:var(--c1) !important; }
+.badge.bg-success{ background:rgba(5,150,105,.12) !important; color:var(--green) !important; }
+.badge.bg-danger{ background:rgba(239,68,68,.12) !important; color:var(--red) !important; }
+
+@media(max-width:576px){
+    .quick-actions-title,
+    .dashboard-box h4{ font-size:1rem; }
 }

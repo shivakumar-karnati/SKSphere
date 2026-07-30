@@ -1,0 +1,182 @@
+/* ==========================================================
+   EDIT REVIEW PAGE — "Sticker & Receipt" language
+   ========================================================== */
+
+:root{
+    --c1:#2563eb;
+    --amber:#f59e0b;
+    --green:#059669;
+    --dark:#0f172a;
+}
+
+body{
+    background:#f4f7ff;
+}
+
+.review-page-wrap{
+    max-width:560px;
+    margin:0 auto;
+    padding:50px 16px 60px;
+}
+
+.review-card{
+    background:white;
+    border:3px solid var(--dark);
+    border-radius:24px;
+    box-shadow: 8px 8px 0 rgba(37,99,235,.16);
+    padding:36px;
+    opacity:0;
+    transform:translateY(24px);
+    animation:cardIn .55s ease forwards;
+}
+
+@keyframes cardIn{
+    to{ opacity:1; transform:translateY(0); }
+}
+
+@media(max-width:576px){
+    .review-card{ padding:24px; border-radius:18px; box-shadow:6px 6px 0 rgba(37,99,235,.16); }
+}
+
+.review-card h2{
+    font-weight:900;
+    color:var(--dark);
+    text-align:center;
+    margin-bottom:6px;
+}
+
+.review-card .subtitle{
+    text-align:center;
+    color:#64748b;
+    font-weight:500;
+    font-size:.9rem;
+    margin-bottom:28px;
+}
+
+/* ==========================================================
+   STAR RATING WIDGET — clickable, with hover preview
+   ========================================================== */
+.rating-label{
+    font-weight:700;
+    color:#334155;
+    font-size:.85rem;
+    margin-bottom:10px;
+    display:block;
+    text-align:center;
+}
+
+.star-rating{
+    display:flex;
+    justify-content:center;
+    gap:10px;
+    margin-bottom:8px;
+}
+
+.star-rating .star{
+    font-size:2.4rem;
+    color:#e2e8f0;
+    cursor:pointer;
+    transition:transform .15s ease, color .15s ease;
+    -webkit-tap-highlight-color:transparent;
+}
+
+.star-rating .star:hover{
+    transform:scale(1.15);
+}
+
+.star-rating .star.filled{
+    color:var(--amber);
+    text-shadow:0 0 14px rgba(245,158,11,.35);
+}
+
+.star-rating .star.pop{
+    animation: starPop .35s ease;
+}
+
+@keyframes starPop{
+    0%{ transform:scale(1); }
+    40%{ transform:scale(1.4) rotate(-8deg); }
+    100%{ transform:scale(1); }
+}
+
+.rating-text{
+    text-align:center;
+    font-weight:800;
+    color:var(--amber);
+    font-size:.95rem;
+    margin-bottom:26px;
+    min-height:22px;
+}
+
+@media(max-width:400px){
+    .star-rating .star{ font-size:2rem; }
+    .star-rating{ gap:6px; }
+}
+
+/* ==========================================================
+   COMMENT
+   ========================================================== */
+label{
+    font-weight:700;
+    color:#334155;
+    font-size:.85rem;
+    margin-bottom:8px;
+    display:block;
+}
+
+.form-control{
+    border-radius:14px;
+    border:2px solid #e5e7eb;
+    padding:14px 16px;
+    font-size:.92rem;
+    transition:.25s;
+}
+
+.form-control:focus{
+    border-color:var(--c1);
+    box-shadow:0 0 0 4px rgba(37,99,235,.14);
+}
+
+.char-counter{
+    text-align:right;
+    font-size:.75rem;
+    font-weight:700;
+    color:#94a3b8;
+    margin-top:6px;
+    margin-bottom:22px;
+}
+
+.char-counter.warning{ color:var(--c1); }
+.char-counter.limit{ color:#ef4444; }
+
+/* ==========================================================
+   SUBMIT BUTTON
+   ========================================================== */
+.update-btn{
+    width:100%;
+    border:none;
+    border-radius:14px;
+    padding:15px;
+    font-size:1rem;
+    font-weight:800;
+    color:white;
+    background:var(--dark);
+    box-shadow: 5px 5px 0 var(--green);
+    transition:.15s;
+}
+
+.update-btn:hover{
+    color:white;
+    transform:translate(2px,2px);
+    box-shadow: 3px 3px 0 var(--green);
+}
+
+.update-btn:active{
+    transform:translate(5px,5px);
+    box-shadow:none;
+}
+
+.update-btn.saving{
+    opacity:.75;
+    pointer-events:none;
+}

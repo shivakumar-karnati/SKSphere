@@ -33,7 +33,7 @@
 .product-image{
     width:100%;
     aspect-ratio: 1 / 1;
-    object-fit:cover;
+    object-fit:contain;
     display:block;
     transition:transform .5s ease;
 }
@@ -59,32 +59,12 @@ h1{
     line-height:1.2;
 }
 
-.price-tag{
-    display:inline-block;
-    background: linear-gradient(135deg,#2563eb,#4f46e5);
+.text-primary{
+    background: linear-gradient(135deg,#2563eb,#4f46e5) !important;
     -webkit-background-clip:text;
-    background-clip:text;
     -webkit-text-fill-color:transparent;
-    color:transparent;
     font-size:2rem;
     font-weight:800;
-}
-
-/* Fallback for browsers that don't support clipped gradient text */
-@supports not ((-webkit-background-clip:text) or (background-clip:text)){
-    .price-tag{
-        color:#2563eb;
-    }
-}
-.price-tag-sm{
-    display:inline-block;
-    background: linear-gradient(135deg,#2563eb,#4f46e5);
-    -webkit-background-clip:text;
-    background-clip:text;
-    -webkit-text-fill-color:transparent;
-    color:transparent;
-    font-weight:800;
-    font-size:1.1rem;
 }
 
 .text-warning{
@@ -318,7 +298,7 @@ p{
     inset:0;
     width:100%;
     height:100%;
-    object-fit:cover;
+    object-fit:contain;
     transition:transform .5s ease;
 }
 

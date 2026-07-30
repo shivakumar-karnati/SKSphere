@@ -721,3 +721,191 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
 });
+
+
+
+/* ==========================================================
+   WISHLIST — heart burst micro-animation on "Add to Cart"
+   Purely a delight touch; the actual add-to-cart still
+   happens via the normal link/URL, this just adds flair
+   before the page navigates.
+   ========================================================== */
+
+document.addEventListener('DOMContentLoaded', function () {
+
+    document.querySelectorAll('.wishlist-btn.add-cart').forEach(btn => {
+        btn.addEventListener('click', function (e) {
+            const card = btn.closest('.product-card');
+            if (!card) return;
+
+            for (let i = 0; i < 6; i++) {
+                const heart = document.createElement('span');
+                heart.textContent = '💙';
+                heart.style.position = 'absolute';
+                heart.style.left = (40 + Math.random() * 20) + '%';
+                heart.style.bottom = '70px';
+                heart.style.fontSize = (14 + Math.random() * 10) + 'px';
+                heart.style.pointerEvents = 'none';
+                heart.style.zIndex = '5';
+                heart.style.animation = `floatUp ${0.8 + Math.random() * 0.4}s ease-out forwards`;
+                card.appendChild(heart);
+
+                setTimeout(() => heart.remove(), 1300);
+            }
+        });
+    });
+
+    // Inject the keyframe once
+    if (!document.getElementById('wishlist-float-keyframes')) {
+        const style = document.createElement('style');
+        style.id = 'wishlist-float-keyframes';
+        style.textContent = `
+            @keyframes floatUp {
+                0% { transform: translateY(0) scale(0.6); opacity: 1; }
+                100% { transform: translateY(-60px) scale(1.1); opacity: 0; }
+            }
+        `;
+        document.head.appendChild(style);
+    }
+
+});
+
+
+/* ==========================================================
+   EDIT REVIEW — clickable star rating, char counter, save feedback
+   ========================================================== */
+
+document.addEventListener('DOMContentLoaded', function () {
+
+    /* ---------- 1. Star rating widget ---------- */
+    const stars = document.querySelectorAll('.star-rating .star');
+    const ratingInput = document.getElementById('rating-input');
+    const ratingText = document.getElementById('rating-text');
+
+    const labels = {
+        1: 'Poor',
+        2: 'Fair',
+        3: 'Good',
+        4: 'Very Good',
+        5: 'Excellent'
+    };
+
+    function paintStars(value) {
+        stars.forEach(star => {
+            const starValue = parseInt(star.dataset.value, 10);
+            star.classList.toggle('filled', starValue <= value);
+        });
+    }
+
+    if (stars.length && ratingInput) {
+
+        let currentRating = parseInt(ratingInput.value, 10) || 5;
+        paintStars(currentRating);
+        if (ratingText) ratingText.textContent = labels[currentRating] || '';
+
+        stars.forEach(star => {
+            const starValue = parseInt(star.dataset.value, 10);
+
+            star.addEventListener('mouseenter', () => paintStars(starValue));
+
+            star.addEventListener('mouseleave', () => paintStars(currentRating));
+
+            star.addEventListener('click', () => {
+                currentRating = starValue;
+                ratingInput.value = starValue;
+                paintStars(starValue);
+
+                if (ratingText) ratingText.textContent = labels[starValue] || '';
+
+                star.classList.remove('pop');
+                void star.offsetWidth;
+                star.classList.add('pop');
+            });
+        });
+    }
+
+    /* ---------- 2. Comment character counter ---------- */
+    const commentField = document.getElementById('comment-field');
+    const counterEl = document.getElementById('comment-char-counter');
+    const maxLength = 500;
+
+    if (commentField && counterEl) {
+
+        function updateCounter() {
+            const remaining = maxLength - commentField.value.length;
+            counterEl.textContent = `${commentField.value.length} / ${maxLength}`;
+
+            counterEl.classList.remove('warning', 'limit');
+            if (remaining <= 0) {
+                counterEl.classList.add('limit');
+            } else if (remaining <= 40) {
+                counterEl.classList.add('warning');
+            }
+        }
+
+        commentField.addEventListener('input', updateCounter);
+        updateCounter();
+    }
+
+    /* ---------- 3. Save button feedback ---------- */
+    const form = document.querySelector('.review-card form');
+    const updateBtn = document.querySelector('.update-btn');
+
+    if (form && updateBtn) {
+        form.addEventListener('submit', function () {
+            updateBtn.classList.add('saving');
+            updateBtn.innerHTML = '⏳ Updating...';
+        });
+    }
+
+});
+
+
+
+/* ==========================================================
+   ADMIN DASHBOARD — animated count-up for stat numbers
+   ========================================================== */
+
+document.addEventListener('DOMContentLoaded', function () {
+
+    const statNumbers = document.querySelectorAll('.dashboard-card .stat-number');
+    if (!statNumbers.length) return;
+
+    function animateCount(el) {
+        const raw = el.dataset.value || '0';
+        const prefix = el.dataset.prefix || '';
+        const target = parseFloat(raw.replace(/[^0-9.]/g, '')) || 0;
+        const hasDecimal = raw.includes('.');
+        const duration = 1000;
+        let startTime = null;
+
+        function step(timestamp) {
+            if (!startTime) startTime = timestamp;
+            const progress = Math.min((timestamp - startTime) / duration, 1);
+            const eased = 1 - Math.pow(1 - progress, 3);
+            const current = target * eased;
+
+            el.textContent = prefix + (hasDecimal ? current.toFixed(2) : Math.round(current));
+
+            if (progress < 1) {
+                requestAnimationFrame(step);
+            } else {
+                el.textContent = prefix + (hasDecimal ? target.toFixed(2) : target);
+            }
+        }
+
+        requestAnimationFrame(step);
+    }
+
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                animateCount(entry.target);
+                observer.unobserve(entry.target);
+            }
+        });
+    }, { threshold: 0.3 });
+
+    statNumbers.forEach(el => observer.observe(el));
+
+});

@@ -23,15 +23,15 @@ def home(request):
 
     featured_products = Product.objects.order_by(
         '-created_at'
-    )[:8]
+    )[:16]
 
     new_arrivals = Product.objects.order_by(
         '-created_at'
-    )[:8]
+    )[:16]
 
     best_sellers = Product.objects.order_by(
         '-sold_count'
-    )[:8]
+    )[:16]
 
     recent_ids = request.session.get(
         'recent_products',
@@ -44,7 +44,7 @@ def home(request):
 
     recommended_products = Product.objects.exclude(
         id__in=recent_ids
-    ).order_by('?')[:8]
+    ).order_by('?')[:16]
 
     return render(
         request,

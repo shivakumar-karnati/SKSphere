@@ -1,46 +1,58 @@
 {% extends 'base.html' %}
+{% load static %}
+
+{% block css %}
+<link rel="stylesheet"
+      href="{% static 'css/products/wishlist.css' %}">
+{% endblock %}
 
 {% block content %}
 
-<div class="container mt-5">
+<div class="wishlist-page">
 
-    <h1 class="text-center mb-5">
-
+    <h1 class="wishlist-title">
         ❤️ My Wishlist
-
     </h1>
 
-    <div class="row">
+    <p class="wishlist-subtitle">
+        Products you've saved for later
+    </p>
+
+    {% if wishlist_items %}
+
+    <div class="wishlist-grid">
 
         {% for item in wishlist_items %}
 
-        <div class="col-md-3 mb-4">
+        <div class="product-card">
 
-            <div class="card shadow">
+            <div class="wishlist-heart">
+                <i class="bi bi-heart-fill"></i>
+            </div>
 
+            <div class="product-img-box">
                 <img src="{{ item.product.image.url }}"
-                     class="card-img-top"
-                     height="250">
+                     alt="{{ item.product.name }}">
+            </div>
 
-                <div class="card-body text-center">
+            <div class="product-body">
 
-                    <h5>
+                <h5>{{ item.product.name }}</h5>
 
-                        {{ item.product.name }}
+                <span class="price-tag">₹{{ item.product.price }}</span>
 
-                    </h5>
-
-                    <h6 class="text-primary">
-
-                        ₹{{ item.product.price }}
-
-                    </h6>
+                <div class="wishlist-actions">
 
                     <a href="{% url 'product_detail' item.product.id %}"
-                       class="btn btn-primary">
+                       class="wishlist-btn view">
+                        <i class="bi bi-eye-fill"></i>
+                        View
+                    </a>
 
-                        View Product
-
+                    <a href="{% url 'add_to_cart' item.product.id %}"
+                       class="wishlist-btn add-cart">
+                        <i class="bi bi-cart-plus-fill"></i>
+                        Add to Cart
                     </a>
 
                 </div>
@@ -49,17 +61,28 @@
 
         </div>
 
-        {% empty %}
-
-        <h3 class="text-center">
-
-            Wishlist Empty ❤️
-
-        </h3>
-
         {% endfor %}
 
     </div>
+
+    {% else %}
+
+    <div class="wishlist-empty">
+
+        <div class="empty-icon">💔</div>
+
+        <h3>Your Wishlist Is Empty</h3>
+
+        <p>Save products you love and find them here anytime.</p>
+
+        <a href="{% url 'products' %}" class="wishlist-btn view">
+            <i class="bi bi-shop"></i>
+            Browse Products
+        </a>
+
+    </div>
+
+    {% endif %}
 
 </div>
 

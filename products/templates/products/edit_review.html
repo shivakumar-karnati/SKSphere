@@ -1,39 +1,54 @@
 {% extends 'base.html' %}
+{% load static %}
+
+{% block css %}
+<link rel="stylesheet"
+      href="{% static 'css/products/edit_review.css' %}">
+{% endblock %}
 
 {% block content %}
 
-<div class="container mt-5">
+<div class="review-page-wrap">
 
-    <div class="card p-4 shadow">
+    <div class="review-card">
 
         <h2>Edit Review</h2>
+        <p class="subtitle">Update your rating and comment</p>
 
         <form method="POST">
 
             {% csrf_token %}
 
-            <select
-                name="rating"
-                class="form-select">
+            <label class="rating-label">Your Rating</label>
 
-                <option value="5">⭐⭐⭐⭐⭐</option>
-                <option value="4">⭐⭐⭐⭐</option>
-                <option value="3">⭐⭐⭐</option>
-                <option value="2">⭐⭐</option>
-                <option value="1">⭐</option>
+            <div class="star-rating">
+                <i class="bi bi-star-fill star" data-value="1"></i>
+                <i class="bi bi-star-fill star" data-value="2"></i>
+                <i class="bi bi-star-fill star" data-value="3"></i>
+                <i class="bi bi-star-fill star" data-value="4"></i>
+                <i class="bi bi-star-fill star" data-value="5"></i>
+            </div>
 
-            </select>
+            <div class="rating-text" id="rating-text"></div>
+
+            <input type="hidden"
+                   id="rating-input"
+                   name="rating"
+                   value="{{ review.rating|default:5 }}">
+
+            <label for="comment-field">Your Review</label>
 
             <textarea
+                id="comment-field"
                 name="comment"
-                class="form-control mt-3"
-                rows="4">{{ review.comment }}</textarea>
+                class="form-control"
+                rows="4"
+                maxlength="500">{{ review.comment }}</textarea>
 
-            <button
-                class="btn btn-success mt-3">
+            <div class="char-counter" id="comment-char-counter">0 / 500</div>
 
-                Update Review
-
+            <button type="submit" class="update-btn">
+                🚀 Update Review
             </button>
 
         </form>
@@ -42,4 +57,8 @@
 
 </div>
 
+{% endblock %}
+
+{% block js %}
+<script src="{% static 'js/edit_review.js' %}"></script>
 {% endblock %}
