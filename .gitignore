@@ -34,3 +34,5 @@ staticfiles/
 # OS files
 .DS_Store
 Thumbs.db
+
+db_backup.json

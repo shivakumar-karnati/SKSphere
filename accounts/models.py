@@ -19,7 +19,7 @@ class Profile(models.Model):
         max_length=20,
         blank=True
     )
-
+    email = models.EmailField(max_length=50,blank=True)
     address = models.TextField(
         blank=True
     )

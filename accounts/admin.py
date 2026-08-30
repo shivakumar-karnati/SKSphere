@@ -7,12 +7,16 @@ class ProfileAdmin(admin.ModelAdmin):
 
     list_display = (
         'user',
+        'user_email',
         'phone',
         'city',
     )
 
     search_fields = (
         'user__username',
+        'user__email',
+        'user__first_name',
+        'user__last_name',
         'phone',
         'city',
     )
@@ -32,3 +36,7 @@ class ProfileAdmin(admin.ModelAdmin):
     readonly_fields = (
         'user',
     )
+
+    @admin.display(description='Email')
+    def user_email(self, obj):
+        return obj.user.email
