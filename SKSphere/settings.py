@@ -36,9 +36,9 @@ DEBUG = config(
     cast=bool
 )
 ALLOWED_HOSTS = [
-    "localhost",
-    "127.0.0.1",
-    "sksphere.onrender.com",
+    'shivakumar.pythonanywhere.com',
+    'localhost',
+    '127.0.0.1',
 ]
 
 render_hostname = os.environ.get("RENDER_EXTERNAL_HOSTNAME")
@@ -169,7 +169,7 @@ CLOUDINARY_STORAGE = {
 
 STORAGES = {
     "default": {
-        "BACKEND": "cloudinary_storage.storage.MediaCloudinaryStorage",
+        "BACKEND": "django.core.files.storage.FileSystemStorage",
     },
     "staticfiles": {
         "BACKEND": "whitenoise.storage.CompressedManifestStaticFilesStorage",
